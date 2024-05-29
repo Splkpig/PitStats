@@ -31,7 +31,7 @@ def calcBracketColor(prestige: int):
 
 
 def calculateXPForLevel(prestige: int, level: int):
-    prestigeMultiplier = int(read_specific_line("../PitStats/useful_things/pitdata/xp_multipliers.txt", prestige))
+    prestigeMultiplier = float(read_specific_line("../PitStats/useful_things/pitdata/xp_multipliers.txt", prestige))
     levelTensChunk = int(level / 10)
     levelsAfterTen = level - (levelTensChunk * 10)
 
@@ -46,7 +46,7 @@ def calculateXPForLevel(prestige: int, level: int):
 
 
 def xpToLevel(prestige: int, xp: int):
-    prestigeMultiplier = int(read_specific_line("../PitStats/useful_things/pitdata/xp_multipliers.txt", prestige))
+    prestigeMultiplier = float(read_specific_line("../PitStats/useful_things/pitdata/xp_multipliers.txt", prestige))
     xpOfPrestige: int = 0
 
     for i in range(0, 13):

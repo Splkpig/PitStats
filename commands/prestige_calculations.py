@@ -25,7 +25,7 @@ class simpleView(discord.ui.View):
         docData = dataPP["data"]["doc"]
 
         currentXP = docData["xp"]
-        goalXP = int(read_specific_line("../PitStats/useful_things/pitdata/xp_sums.txt", globalPrestige - 1))
+        goalXP = float(read_specific_line("../PitStats/useful_things/pitdata/xp_sums.txt", globalPrestige - 1))
         goalXPFromFinalPrestige = pit_functions.calculateXPForLevel(globalPrestige, globalLevel)
         goalXP += goalXPFromFinalPrestige
         currentPrestige = len(dataPP["data"]["prestiges"]) - 1
@@ -75,16 +75,23 @@ class prestigeCalculations(commands.Cog):
             prestigeGoalGold = goldProgress["displayGoal"]
             currentPrestige = len(dataPP["data"]["prestiges"]) - 1
             currentLevel = formatting_functions.extract_substring(dataPP['data']['formattedLevel'])
+            neededXP = prestigeGoalXP - currentXP
+            neededGold = prestigeGoalGold - currentGoldGrinded
 
             embed = discord.Embed(title=f"Prestige Info for [{formatting_functions.int_to_roman(currentPrestige)}-{currentLevel}] {dataPP['data']['name']}", color=pit_functions.calcBracketColor(currentPrestige))
             embed.set_footer(text=footerDateGen())
             embed.set_thumbnail(url=f"https://visage.surgeplay.com/face/512/{dataPP['data']['uuid']}?format=webp")
-            embed.add_field(name=f"XP Breakdown",
-                            value=f"{formatting_functions.add_commas(currentXP)} XP / {formatting_functions.add_commas(prestigeGoalXP)} XP \n {int(100 * (currentXP/prestigeGoalXP))}% grinded",
-                            inline=False)
-            embed.add_field(name=f"Gold Breakdown",
-                            value=f"{formatting_functions.add_commas(currentGoldGrinded)} G / {formatting_functions.add_commas(prestigeGoalGold)} G \n {int(100 * (currentGoldGrinded/prestigeGoalGold))}% grinded",
-                            inline=False)
+
+            if currentLevel != '120':
+                embed.add_field(name=f"XP Breakdown", value=f"{formatting_functions.add_commas(currentXP)} XP / {formatting_functions.add_commas(prestigeGoalXP)} XP \n{int(100 * (currentXP/prestigeGoalXP))}% grinded \nThis will take {formatting_functions.add_commas(int(neededXP / dataPP['data']['doc']['xpHourly']))} hours", inline=False)
+            else:
+                embed.add_field(name=f"XP Breakdown", value=f"{formatting_functions.add_commas(currentXP)} XP / {formatting_functions.add_commas(prestigeGoalXP)} XP \n100% grinded", inline=False)
+
+            if currentGoldGrinded < prestigeGoalGold:
+                embed.add_field(name=f"XP Breakdown", value=f"{formatting_functions.add_commas(currentXP)} XP / {formatting_functions.add_commas(prestigeGoalXP)} XP \n{int(100 * (currentXP/prestigeGoalXP))}% grinded \nThis will take {formatting_functions.add_commas(int(neededGold / dataPP['data']['doc']['goldHourly']))} hours", inline=False)
+            else:
+                embed.add_field(name=f"Gold Breakdown", value=f"{formatting_functions.add_commas(currentGoldGrinded)} G / {formatting_functions.add_commas(prestigeGoalGold)} G \n{int(100 * (currentGoldGrinded/prestigeGoalGold))}% grinded",inline=False)
+
             await interaction.response.send_message(embed=embed)  # noqa
 
     @app_commands.command(name="xp-until", description="XP needed to reach a certain prestige and level")
@@ -114,16 +121,32 @@ class prestigeCalculations(commands.Cog):
             await interaction.response.send_message(embed=embedFail, ephemeral=True)  # noqa
 
         else:
+
+            failed = False
+
+            if not (0 <= prestige <= 50) or not (0 <= level <= 120):
+                embedPrestigeFail = discord.Embed(title="Enter a valid prestige and level combination", color=discord.Color.red())
+                failed = True
+
+                await interaction.response.send_message(embed=embedPrestigeFail, ephemeral=True) # noqa
+
             docData = dataPP["data"]["doc"]
             currentXP = docData["xp"]
             prestigeList = dataPP["data"]["prestiges"]
 
-            goalXP = int(read_specific_line("../PitStats/useful_things/pitdata/xp_sums.txt", prestige - 1))
+            goalXP = float(read_specific_line("../PitStats/useful_things/pitdata/xp_sums.txt", prestige - 1))
             goalXPFromFinalPrestige = pit_functions.calculateXPForLevel(prestige, level)
             goalXP += goalXPFromFinalPrestige
 
             neededXP = goalXP - currentXP
             currentPrestige = len(prestigeList) - 1
+            currentLevel = formatting_functions.extract_substring(dataPP['data']['formattedLevel'])
+
+            if (prestige == currentPrestige and level <= int(currentLevel)) or (prestige < currentPrestige) and not failed:
+                embedPrestigeFail = discord.Embed(title="Enter a prestige and level combination greater than your current prestige", color=discord.Color.red())
+                failed = True
+
+                await interaction.response.send_message(embed=embedPrestigeFail, ephemeral=True) # noqa
 
             embed = discord.Embed(title=f"XP until for {dataPP['data']['name']}", color=pit_functions.calcBracketColor(prestige))
             embed.set_footer(text=footerDateGen())
@@ -134,12 +157,13 @@ class prestigeCalculations(commands.Cog):
             embed.add_field(name=f"", value=f"This will take {formatting_functions.add_commas(int(neededXP / dataPP['data']['doc']['xpHourly']))} hours", inline=False)
             embed.set_thumbnail(url=f"https://visage.surgeplay.com/face/512/{dataPP['data']['uuid']}?format=webp")
 
-            view = simpleView()
+            view = simpleView(timeout=None)
 
-            await interaction.response.send_message(embed=embed, view=view)  # noqa
-            await view.wait()
+            if not failed:
+                await interaction.response.send_message(embed=embed, view=view)  # noqa
+                await view.wait()
 
-    @app_commands.command(name="kings_quest", description="Determines what level completing the King's Quest will grant")
+    @app_commands.command(name="kings-quest", description="Determines what level completing the King's Quest will grant")
     async def kingsQuest(self, interaction: discord.Interaction, player: str):
         """
         Args:

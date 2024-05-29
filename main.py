@@ -7,7 +7,7 @@ class Client(commands.Bot):
     def __init__(self):
         super().__init__(command_prefix="!", intents=discord.Intents.all())
 
-        self.commandsList = ["commands.pitpanda_signatures", "commands.prestige_calculations", "commands.fun"]
+        self.commandsList = ["commands.pitpanda_signatures", "commands.prestige_calculations", "commands.fun", "commands.basic"]
 
     async def setup_hook(self):
         for ext in self.commandsList:

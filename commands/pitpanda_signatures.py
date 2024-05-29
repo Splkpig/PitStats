@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 from discord import app_commands
 from useful_things.pit_functions import calcBracketColor
-from useful_things.api_functions import getKey, getInfo
+from useful_things.api_functions import getInfo
 from useful_things.discord_functions import footerDateGen
 from useful_things.owner_functions import isOwnerAccount
 
@@ -34,7 +34,7 @@ class pitpandaSignatures(commands.Cog):
             if isOwnerAccount(player) == 1:
                 embed.set_footer(text="splk op", icon_url="https://cdn.discordapp.com/avatars/688203642695581717/a_76a39f85528f655d756e6a0973326b35.gif?size=1024")
             elif isOwnerAccount(player) == 2:
-                embed.set_footer(text="rey op", icon_url="https://cdn.discordapp.com/avatars/774915176888533015/c675433a980c674f89b6e81478327c5c.png?size=4096")
+                embed.set_footer(text="rey op", icon_url="https://images-ext-1.discordapp.net/external/0c2WqP3aimB2oJi9q0YGq53fHtQTMpP1qz_eF35kN-U/%3Fsize%3D1024/https/cdn.discordapp.com/avatars/774915176888533015/39000c6479818cf02aa14e4ba9271eb4.png?format=webp&quality=lossless&width=702&height=702")
             else:
                 embed.set_footer(text=footerDateGen())
 
@@ -65,7 +65,7 @@ class pitpandaSignatures(commands.Cog):
             if isOwnerAccount(player) == 1:
                 embed.set_footer(text="splk op", icon_url="https://cdn.discordapp.com/avatars/688203642695581717/a_76a39f85528f655d756e6a0973326b35.gif?size=1024")
             elif isOwnerAccount(player) == 2:
-                embed.set_footer(text="rey op", icon_url="https://cdn.discordapp.com/avatars/774915176888533015/c675433a980c674f89b6e81478327c5c.png?size=4096")
+                embed.set_footer(text="rey op", icon_url="https://images-ext-1.discordapp.net/external/0c2WqP3aimB2oJi9q0YGq53fHtQTMpP1qz_eF35kN-U/%3Fsize%3D1024/https/cdn.discordapp.com/avatars/774915176888533015/39000c6479818cf02aa14e4ba9271eb4.png?format=webp&quality=lossless&width=702&height=702")
             else:
                 embed.set_footer(text=footerDateGen())
 
