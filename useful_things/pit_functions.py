@@ -40,7 +40,8 @@ def calculateXPForLevel(prestige: int, level: int):
         totalXP += (prestigeMultiplier * int(
             read_specific_line("../PitStats/useful_things/pitdata/base_level_xp.txt", i))) * 10
 
-    totalXP += (prestigeMultiplier * int(read_specific_line("../PitStats/useful_things/pitdata/base_level_xp.txt", levelTensChunk))) * levelsAfterTen
+    totalXP += (prestigeMultiplier * int(
+        read_specific_line("../PitStats/useful_things/pitdata/base_level_xp.txt", levelTensChunk))) * levelsAfterTen
 
     return totalXP
 
@@ -50,11 +51,19 @@ def xpToLevel(prestige: int, xp: int):
     xpOfPrestige: int = 0
 
     for i in range(0, 13):
-        for j in range(0, 9):
-            xpOfPrestige += int(read_specific_line("../PitStats/useful_things/pitdata/base_level_xp.txt", i)) * prestigeMultiplier
+        for j in range(0, 10):
+            xpOfPrestige += int(
+                read_specific_line("../PitStats/useful_things/pitdata/base_level_xp.txt", i)) * prestigeMultiplier
             if xpOfPrestige > xp:
                 return i * 10 + j
     return 120
 
 
+def calculateFactionTier(points: int):
+    pointsBreakdown = [30, 100, 250, 700, 1500, 4000, 7000]
 
+    for pointCategory in pointsBreakdown:
+        if pointCategory > points:
+            return pointsBreakdown.index(pointCategory)
+
+    return 7

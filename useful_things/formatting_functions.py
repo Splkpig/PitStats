@@ -64,3 +64,26 @@ def extract_substring(input_string):
     result = input_string[start_pos:end_pos]
 
     return result
+
+
+def format_playtime(playtime_minutes):
+    # Constants for time conversion
+    MINUTES_IN_HOUR = 60
+    HOURS_IN_DAY = 24
+    DAYS_IN_MONTH = 30
+
+    # Convert minutes to hours
+    total_hours = playtime_minutes / MINUTES_IN_HOUR
+
+    # Format playtime based on total hours
+    if total_hours < HOURS_IN_DAY:
+        return f"{total_hours:.0f} hr"
+    elif total_hours < HOURS_IN_DAY * DAYS_IN_MONTH:
+        days = int(total_hours // HOURS_IN_DAY)
+        hours = total_hours % HOURS_IN_DAY
+        return f"{days} d, {hours:.0f} hr"
+    else:
+        total_days = total_hours / HOURS_IN_DAY
+        months = int(total_days // DAYS_IN_MONTH)
+        days = total_days % DAYS_IN_MONTH
+        return f"{months} mo, {days:.0f} d"
