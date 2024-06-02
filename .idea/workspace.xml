@@ -4,12 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b8e38590-9912-446b-8fce-1a99f181b913" name="Changes" comment="added help command and prevented invalid inputs">
-      <change afterPath="$PROJECT_DIR$/commands/stats.py" afterDir="false" />
+    <list default="true" id="b8e38590-9912-446b-8fce-1a99f181b913" name="Changes" comment="progress on overall stats command and added genesis command">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/useful_things/formatting_functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/useful_things/formatting_functions.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/useful_things/pit_functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/useful_things/pit_functions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commands/stats.py" beforeDir="false" afterPath="$PROJECT_DIR$/commands/stats.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -87,7 +84,8 @@
       <workItem from="1716748021148" duration="16167000" />
       <workItem from="1716948769087" duration="9678000" />
       <workItem from="1717107682550" duration="8559000" />
-      <workItem from="1717207081984" duration="4531000" />
+      <workItem from="1717207081984" duration="4735000" />
+      <workItem from="1717253511718" duration="8858000" />
     </task>
     <task id="LOCAL-00001" summary="first commit">
       <option name="closed" value="true" />
@@ -113,7 +111,15 @@
       <option name="project" value="LOCAL" />
       <updated>1716960728965</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="progress on overall stats command and added genesis command">
+      <option name="closed" value="true" />
+      <created>1717227160567</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1717227160567</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -122,11 +128,12 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="first commit" />
     <MESSAGE value="added help command and prevented invalid inputs" />
-    <option name="LAST_COMMIT_MESSAGE" value="added help command and prevented invalid inputs" />
+    <MESSAGE value="progress on overall stats command and added genesis command" />
+    <option name="LAST_COMMIT_MESSAGE" value="progress on overall stats command and added genesis command" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/PitStats$pitpanda_signatures.coverage" NAME="pitpanda_signatures Coverage Results" MODIFIED="1716513805445" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/commands" />
-    <SUITE FILE_PATH="coverage/PitStats$main.coverage" NAME="main Coverage Results" MODIFIED="1717226941584" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/PitStats$main.coverage" NAME="main Coverage Results" MODIFIED="1717313022849" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/PitStats$json.coverage" NAME="json Coverage Results" MODIFIED="1716513691824" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/useful_things" />
     <SUITE FILE_PATH="coverage/PitStats$pitpanda.coverage" NAME="pitpanda Coverage Results" MODIFIED="1716523714871" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/commands" />
     <SUITE FILE_PATH="coverage/PitStats$slash_commands.coverage" NAME="slash_commands Coverage Results" MODIFIED="1716446415161" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
