@@ -124,62 +124,6 @@ class compare(commands.Cog):
 
             await interaction.response.send_message(embed=embed) # noqa
 
-    @app_commands.command(name='genesis', description='Shows a player\'s genesis progress')
-    async def genesis(self, interaction: discord.Interaction, player: str):
-        """
-        Args:
-            player (str): A Minecraft username
-        """
-        pass
-
-        urlPP: str = f"https://pitpanda.rocks/api/players/{player}"
-        data = getInfo(urlPP)
-
-        if not data["success"]:
-            embedFail = discord.Embed(title="Player not found", color=discord.Color.red())
-
-            await interaction.response.send_message(embed=embedFail, ephemeral=True)  # noqa
-
-        else:
-            prestige = len(data["data"]["prestiges"]) - 1
-            level = pit_functions.xpToLevel(prestige, int(data["data"]["xpProgress"]["displayCurrent"]))
-            points = data["data"]["doc"]["genesisPoints"]
-            allegiance = data["data"]["doc"]["allegiance"]
-            tier = pit_functions.calculateFactionTier(points)
-
-            demonRewards = ["Deal +0.5♥︎ damage to players in the Angel faction.", "Unlock the Demon spawn.", "The Mystic Well costs 1/3 of the price.", "Deal +0.5♥︎ damage to players wearing diamond armor.", "Accumulate +50% gold on your bounties. Earn +1 renown when earning renown from events.", "Earn Armageddon Boots.", "Permanently gain +0.2g from kills. Can be claimed up to 15 times."]
-            angelRewards = ["Deal +0.5♥︎ damage to players in the Demon faction.", "Unlock the Angel spawn.", "Diamond items cost 1/3 of the price.", "	Deal +0.25♥︎ damage to players wearing leather armor.", "Accumulate +50% gold on your bounties. Earn +1 renown when earning renown from events.", "Earn Archangel Chestplate.", "Permanently gain +1% XP from kills. Can be claimed up to 15 times."]
-
-            if allegiance == "DEMON":
-                embed = discord.Embed(title=f"Genesis points for [{formatting_functions.int_to_roman(prestige)}-{level}] {data['data']['name']}", color=calcBracketColor(48))
-                embed.add_field(name="", value=f"Allegiance: {allegiance}", inline=False)
-                embed.add_field(name="", value=f"Points: {points}", inline=False)
-                embed.add_field(name="", value=f"Tier: {tier}", inline=False)
-
-                for i in range(0, tier):
-                    embed.add_field(name="", value=f":white_check_mark: {demonRewards[i]}", inline=False)
-
-                for i in range(tier, 7):
-                    embed.add_field(name="", value=f":x: {demonRewards[i]}", inline=False)
-
-            elif allegiance == "ANGEL":
-                embed = discord.Embed(title=f"Genesis points for [{formatting_functions.int_to_roman(prestige)}-{level}] {data['data']['name']}", color=calcBracketColor(35))
-                embed.add_field(name="", value=f"Allegiance: {allegiance}", inline=False)
-                embed.add_field(name="", value=f"Points: {points}", inline=False)
-                embed.add_field(name="", value=f"Tier: {tier}", inline=False)
-
-                for i in range(0, tier):
-                    embed.add_field(name="", value=f":white_check_mark: {angelRewards[i]}", inline=False)
-
-                for i in range(tier, 7):
-                    embed.add_field(name="", value=f":x: {angelRewards[i]}", inline=False)
-            else:
-                embed = discord.Embed(title="No Faction selected", color=discord.Color.red())
-
-            embed.set_thumbnail(url=f"https://visage.surgeplay.com/face/512/{data['data']['uuid']}?format=webp")
-
-            await interaction.response.send_message(embed=embed) # noqa
-
 
 async def setup(client: commands.Bot) -> None:
     await client.add_cog(compare(client))

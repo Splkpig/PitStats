@@ -163,49 +163,6 @@ class prestigeCalculations(commands.Cog):
                 await interaction.response.send_message(embed=embed, view=view)  # noqa
                 await view.wait()
 
-    @app_commands.command(name="kings-quest", description="Determines what level completing the King's Quest will grant")
-    async def kingsQuest(self, interaction: discord.Interaction, player: str):
-        """
-        Args:
-            player (str): A Minecraft username
-        """
-        pass
-
-        urlPP: str = f"https://pitpanda.rocks/api/players/{player}"
-        dataPP = getInfo(urlPP)
-
-        if not dataPP["success"]:
-            embed = discord.Embed(title="Player not found", color=discord.Color.red())
-
-            await interaction.response.send_message(embed=embed, ephemeral=True)  # noqa
-
-        else:
-            currentPrestige = len(dataPP["data"]["prestiges"]) - 1
-            currentPrestigeRomanNum = formatting_functions.int_to_roman(currentPrestige)
-            playerName = dataPP['data']['name']
-
-            if currentPrestige == 0:
-                embed = discord.Embed(title=f"{playerName} can't do kings", color=discord.Color.red())
-
-                await interaction.response.send_message(embed=embed) # noqa
-
-            currentXP = dataPP["data"]["xpProgress"]["displayCurrent"]
-            prestigeGoalXP = dataPP["data"]["xpProgress"]["displayGoal"]
-            afterKingsXP = int(prestigeGoalXP / 3) + currentXP
-            resultingLevel = pit_functions.xpToLevel(currentPrestige, afterKingsXP)
-
-            if resultingLevel == 120:
-                grantedXP = prestigeGoalXP - currentXP
-            else:
-                grantedXP = int(prestigeGoalXP / 3)
-
-            embed = discord.Embed(title=f"Kings Quest for {playerName}", color=pit_functions.calcBracketColor(currentPrestige))
-            embed.add_field(name=f"[{currentPrestigeRomanNum}-{formatting_functions.extract_substring(dataPP['data']['formattedLevel'])}] ---> [{currentPrestigeRomanNum}-{resultingLevel}]:", value=f"{formatting_functions.add_commas(grantedXP)} XP granted")
-            embed.set_footer(text=footerDateGen())
-            embed.set_thumbnail(url=f"https://visage.surgeplay.com/face/512/{dataPP['data']['uuid']}?format=webp")
-
-            await interaction.response.send_message(embed=embed) # noqa
-
 
 async def setup(client: commands.Bot) -> None:
     await client.add_cog(prestigeCalculations(client))

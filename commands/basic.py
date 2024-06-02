@@ -8,13 +8,20 @@ pitpandaSignatures.add_field(name="/profile *player*", value="Displays a player'
 
 prestigeCalculations = discord.Embed(title="Prestige Calculations", color=discord.Color.greyple())
 prestigeCalculations.add_field(name="/prestige-info *player*", value="Displays a player's prestige progress", inline=False)
-prestigeCalculations.add_field(name="/kings-quest *player*", value="Displays the granted XP from completing a King's Quest", inline=False)
 prestigeCalculations.add_field(name="/xp-until *player*", value="Calculates the needed XP until reaching a certain Prestige and Level", inline=False)
+
+mapQuests = discord.Embed(title="Map Quests", color=discord.Color.greyple())
+mapQuests.add_field(name="/kings-quest *player*", value="Displays the granted XP from completing a King's Quest", inline=False)
+mapQuests.add_field(name="/genesis *player*", value="Displays a player's Genesis Faction, points, and progress", inline=False)
+
+stats = discord.Embed(title="Stats", color=discord.Color.greyple())
+stats.add_field(name="/overview *player*", value="Displays an overview of the player's stats", inline=False)
+stats.add_field(name="/compare *player1* *player2*", value="Compares the overview stats of two players", inline=False)
 
 funCommands = discord.Embed(title="Fun Commands", color=discord.Color.greyple())
 funCommands.add_field(name="/jenna *player*", value="Compares a player's yapping to Jenna's", inline=False)
 
-helpPages = [pitpandaSignatures, prestigeCalculations, funCommands]
+helpPages = [pitpandaSignatures, prestigeCalculations, mapQuests, stats, funCommands]
 currentPage = -1
 
 
