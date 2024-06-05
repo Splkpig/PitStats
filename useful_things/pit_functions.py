@@ -30,6 +30,35 @@ def calcBracketColor(prestige: int):
         return 0x555555
 
 
+def getBracketColorEmoji(prestige: int):
+    if prestige == 0:
+        return "<:pit_grey_circle:1247720645769560074>"
+    elif int(prestige / 5) == 0:
+        return "<:pit_blue_circle:1247721141821374509>"
+    elif int(prestige / 5) == 1:
+        return "<:pit_yellow_circle:1247721236063322184>"
+    elif int(prestige / 5) == 2:
+        return "<:pit_orange_circle:1247721318397247570>"
+    elif int(prestige / 5) == 3:
+        return "<:pit_red_circle:1247721415021694977>"
+    elif int(prestige / 5) == 4:
+        return "<:pit_purple_circle:1247721495296475187>"
+    elif int(prestige / 5) == 5:
+        return "<:pit_pink_circle:1247721621788299324>"
+    elif int(prestige / 5) == 6:
+        return ":white_circle:"
+    elif int(prestige / 5) == 7:
+        return "<:pit_aqua_circle:1247721742919536690>"
+    elif int(prestige / 5) == 8:
+        return "<:pit_dark_blue_circle:1247721862318915585>"
+    elif prestige == 45 or prestige == 46 or prestige == 47:
+        return "<:pit_black_circle:1247722002429775872>"
+    elif prestige == 48 or prestige == 49:
+        return "<:pit_dark_red_circle:1247720152103911504>"
+    else:
+        return "<:pit_dark_grey_circle:1247722113553399828>"
+
+
 def calculateXPForLevel(prestige: int, level: int):
     prestigeMultiplier = float(read_specific_line("../PitStats/useful_things/pitdata/xp_multipliers.txt", prestige))
     levelTensChunk = int(level / 10)

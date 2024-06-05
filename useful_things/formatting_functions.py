@@ -6,6 +6,9 @@ def add_commas(number):
 
 
 def int_to_roman(num):
+    if num == 0:
+        return ""
+
     if not (1 <= num <= 50):
         raise ValueError("Number out of range, must be between 1 and 50")
 
@@ -23,7 +26,7 @@ def int_to_roman(num):
             roman_num += syb[i]
             num -= val[i]
         i += 1
-    return roman_num
+    return roman_num + "-"
 
 
 def extract_number(input_string):

@@ -35,11 +35,11 @@ class simpleView(discord.ui.View):
 
         embed = discord.Embed(title=f"XP until for {dataPP['data']['name']}", color=pit_functions.calcBracketColor(globalPrestige))
         embed.set_footer(text=footerDateGen())
-        embed.add_field(name=f"[{formatting_functions.int_to_roman(globalPrestige)}-{globalLevel}]:",
+        embed.add_field(name=f"[{formatting_functions.int_to_roman(globalPrestige)}{globalLevel}]:",
                         value=f"{formatting_functions.add_commas(goalXP)} XP required", inline=False)
-        embed.add_field(name=f"[{formatting_functions.int_to_roman(currentPrestige)}-{currentLevel}] {dataPP['data']['name']} currently has:",
+        embed.add_field(name=f"[{formatting_functions.int_to_roman(currentPrestige)}{currentLevel}] {dataPP['data']['name']} currently has:",
                         value=f"{formatting_functions.add_commas(currentXP)} XP", inline=False)
-        embed.add_field(name=f"To reach [{formatting_functions.int_to_roman(globalPrestige)}-{globalLevel}]: ",
+        embed.add_field(name=f"To reach [{formatting_functions.int_to_roman(globalPrestige)}{globalLevel}]: ",
                         value=f"{formatting_functions.add_commas(neededXP)} XP required", inline=False)
         embed.add_field(name=f"At {formatting_functions.add_commas(int(dataPP['data']['doc']['xpHourly']))} XP per hour:", value=f"{formatting_functions.add_commas(neededXP)} XP will take {formatting_functions.add_commas(int(neededXP / dataPP['data']['doc']['xpHourly']))} hours", inline=False)
 
@@ -60,37 +60,41 @@ class prestigeCalculations(commands.Cog):
         pass
 
         urlPP: str = f"https://pitpanda.rocks/api/players/{player}"
-        dataPP = getInfo(urlPP)
+        data = getInfo(urlPP)
 
-        if not dataPP["success"]:
+        if not data["success"]:
             embedFail = discord.Embed(title="Player not found", color=discord.Color.red())
 
             await interaction.response.send_message(embed=embedFail, ephemeral=True)  # noqa
         else:
-            xpProgress = dataPP["data"]["xpProgress"]
-            goldProgress = dataPP["data"]["goldProgress"]
+
+            currentPrestige = len(data["data"].get("prestiges", [0])) - 1
+
+            xpProgress = data["data"].get("xpProgress", {})
+            display_current_xp = int(xpProgress.get("displayCurrent", 0))
+            currentLevel = pit_functions.xpToLevel(currentPrestige, display_current_xp)
+
+            goldProgress = data["data"].get("goldProgress", {})
             currentXP = xpProgress["displayCurrent"]
             prestigeGoalXP = xpProgress["displayGoal"]
             currentGoldGrinded = goldProgress["displayCurrent"]
             prestigeGoalGold = goldProgress["displayGoal"]
-            currentPrestige = len(dataPP["data"]["prestiges"]) - 1
-            currentLevel = formatting_functions.extract_substring(dataPP['data']['formattedLevel'])
             neededXP = prestigeGoalXP - currentXP
             neededGold = prestigeGoalGold - currentGoldGrinded
 
-            embed = discord.Embed(title=f"Prestige Info for [{formatting_functions.int_to_roman(currentPrestige)}-{currentLevel}] {dataPP['data']['name']}", color=pit_functions.calcBracketColor(currentPrestige))
+            embed = discord.Embed(title=f"Prestige Info for [{formatting_functions.int_to_roman(currentPrestige)}{currentLevel}] {data['data']['name']}", color=pit_functions.calcBracketColor(currentPrestige))
             embed.set_footer(text=footerDateGen())
-            embed.set_thumbnail(url=f"https://visage.surgeplay.com/face/512/{dataPP['data']['uuid']}?format=webp")
+            embed.set_thumbnail(url=f"https://visage.surgeplay.com/face/512/{data['data']['uuid']}?format=webp")
 
             if currentLevel != '120':
-                embed.add_field(name=f"XP Breakdown", value=f"{formatting_functions.add_commas(currentXP)} XP / {formatting_functions.add_commas(prestigeGoalXP)} XP \n{int(100 * (currentXP/prestigeGoalXP))}% grinded \nThis will take {formatting_functions.add_commas(int(neededXP / dataPP['data']['doc']['xpHourly']))} hours", inline=False)
+                embed.add_field(name=f"<:xpbottle:1245974825865056276> XP Breakdown", value=f"{formatting_functions.add_commas(currentXP)} XP / {formatting_functions.add_commas(prestigeGoalXP)} XP \n{int(100 * (currentXP/prestigeGoalXP))}% grinded \nThis will take {formatting_functions.add_commas(int(neededXP / data['data']['doc']['xpHourly']))} hours", inline=False)
             else:
-                embed.add_field(name=f"XP Breakdown", value=f"{formatting_functions.add_commas(currentXP)} XP / {formatting_functions.add_commas(prestigeGoalXP)} XP \n100% grinded", inline=False)
+                embed.add_field(name=f"<:xpbottle:1245974825865056276> XP Breakdown", value=f"{formatting_functions.add_commas(currentXP)} XP / {formatting_functions.add_commas(prestigeGoalXP)} XP \n100% grinded", inline=False)
 
             if currentGoldGrinded < prestigeGoalGold:
-                embed.add_field(name=f"XP Breakdown", value=f"{formatting_functions.add_commas(currentXP)} XP / {formatting_functions.add_commas(prestigeGoalXP)} XP \n{int(100 * (currentXP/prestigeGoalXP))}% grinded \nThis will take {formatting_functions.add_commas(int(neededGold / dataPP['data']['doc']['goldHourly']))} hours", inline=False)
+                embed.add_field(name=f"<:goldingot:1247391882968043652> Gold Breakdown", value=f"{formatting_functions.add_commas(currentXP)} G / {formatting_functions.add_commas(prestigeGoalGold)} G \n{int(100 * (currentGoldGrinded/prestigeGoalGold))}% grinded \nThis will take {formatting_functions.add_commas(int(neededGold / data['data']['doc']['goldHourly']))} hours", inline=False)
             else:
-                embed.add_field(name=f"Gold Breakdown", value=f"{formatting_functions.add_commas(currentGoldGrinded)} G / {formatting_functions.add_commas(prestigeGoalGold)} G \n{int(100 * (currentGoldGrinded/prestigeGoalGold))}% grinded",inline=False)
+                embed.add_field(name=f"<:goldingot:1247391882968043652> Gold Breakdown", value=f"{formatting_functions.add_commas(currentGoldGrinded)} G / {formatting_functions.add_commas(prestigeGoalGold)} G \n{int(100 * (currentGoldGrinded/prestigeGoalGold))}% grinded",inline=False)
 
             await interaction.response.send_message(embed=embed)  # noqa
 
@@ -105,7 +109,7 @@ class prestigeCalculations(commands.Cog):
         pass
 
         urlPP: str = f"https://pitpanda.rocks/api/players/{player}"
-        dataPP = getInfo(urlPP)
+        data = getInfo(urlPP)
 
         global globalPrestige
         global globalLevel
@@ -115,7 +119,7 @@ class prestigeCalculations(commands.Cog):
         globalLevel = level
         globalPlayer = player
 
-        if not dataPP["success"]:
+        if not data["success"]:
             embedFail = discord.Embed(title="Player not found", color=discord.Color.red())
 
             await interaction.response.send_message(embed=embedFail, ephemeral=True)  # noqa
@@ -130,17 +134,20 @@ class prestigeCalculations(commands.Cog):
 
                 await interaction.response.send_message(embed=embedPrestigeFail, ephemeral=True) # noqa
 
-            docData = dataPP["data"]["doc"]
-            currentXP = docData["xp"]
-            prestigeList = dataPP["data"]["prestiges"]
+            currentPrestige = len(data["data"].get("prestiges", [0])) - 1
+
+            xp_progress = data["data"].get("xpProgress", {})
+            display_current_xp = int(xp_progress.get("displayCurrent", 0))
+            currentLevel = pit_functions.xpToLevel(currentPrestige, display_current_xp)
+
+            doc = data["data"].get("doc", {})
+            xp = doc.get("xp", 0)
 
             goalXP = float(read_specific_line("../PitStats/useful_things/pitdata/xp_sums.txt", prestige - 1))
             goalXPFromFinalPrestige = pit_functions.calculateXPForLevel(prestige, level)
             goalXP += goalXPFromFinalPrestige
 
-            neededXP = goalXP - currentXP
-            currentPrestige = len(prestigeList) - 1
-            currentLevel = formatting_functions.extract_substring(dataPP['data']['formattedLevel'])
+            neededXP = goalXP - xp
 
             if (prestige == currentPrestige and level <= int(currentLevel)) or (prestige < currentPrestige) and not failed:
                 embedPrestigeFail = discord.Embed(title="Enter a prestige and level combination greater than your current prestige", color=discord.Color.red())
@@ -148,14 +155,14 @@ class prestigeCalculations(commands.Cog):
 
                 await interaction.response.send_message(embed=embedPrestigeFail, ephemeral=True) # noqa
 
-            embed = discord.Embed(title=f"XP until for {dataPP['data']['name']}", color=pit_functions.calcBracketColor(prestige))
+            embed = discord.Embed(title=f"XP until for {data['data']['name']}", color=pit_functions.calcBracketColor(prestige))
             embed.set_footer(text=footerDateGen())
 
             embed.add_field(
-                name=f"[{formatting_functions.int_to_roman(currentPrestige)}-{formatting_functions.extract_substring(dataPP['data']['formattedLevel'])}] ---> [{formatting_functions.int_to_roman(prestige)}-{level}]:",
-                value=f"{formatting_functions.add_commas(neededXP)} XP required")
-            embed.add_field(name=f"", value=f"This will take {formatting_functions.add_commas(int(neededXP / dataPP['data']['doc']['xpHourly']))} hours", inline=False)
-            embed.set_thumbnail(url=f"https://visage.surgeplay.com/face/512/{dataPP['data']['uuid']}?format=webp")
+                name=f"[{formatting_functions.int_to_roman(currentPrestige)}{currentLevel}] ---> [{formatting_functions.int_to_roman(prestige)}{level}]:",
+                value=f"<:xpbottle:1245974825865056276> {formatting_functions.add_commas(neededXP)} XP required")
+            embed.add_field(name=f"", value=f"<a:minecraftclock:1247400003786510479> This will take {formatting_functions.add_commas(int(neededXP / data['data']['doc']['xpHourly']))} hours", inline=False)
+            embed.set_thumbnail(url=f"https://visage.surgeplay.com/face/512/{data['data']['uuid']}?format=webp")
 
             view = simpleView(timeout=None)
 

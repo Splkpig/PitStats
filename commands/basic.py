@@ -51,8 +51,6 @@ class simpleView(discord.ui.View):
         global currentPage
         global helpPages
 
-        print(currentPage)
-
         if currentPage <= 0:
             currentPage += 1
 
@@ -77,7 +75,8 @@ class helpCommand(commands.Cog):
 
     @app_commands.command(name="help", description="Displays the bot's commands")
     async def help(self, interaction: discord.Interaction):
-        embed = discord.Embed(title="Page through the bot's different commands", color=discord.Color.greyple())
+        embed = discord.Embed(title="Help!", color=discord.Color.greyple())
+        embed.add_field(name="View the bot's different commands", value="")
 
         view = simpleView(timeout=None)
 

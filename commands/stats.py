@@ -32,31 +32,41 @@ class compare(commands.Cog):
             await interaction.response.send_message(embed=embedFail, ephemeral=True)  # noqa
 
         else:
-            prestige = len(player1Data["data"]["prestiges"]) - 1
-            level = pit_functions.xpToLevel(prestige, int(player1Data["data"]["xpProgress"]["displayCurrent"]))
-            xp = player1Data["data"]["doc"]["xp"]
-            gold = player1Data["data"]["doc"]["lifetimeGold"]
-            kills = player1Data["data"]["doc"]["kills"]
-            deaths = player1Data["data"]["doc"]["deaths"]
-            kdr = str(player1Data["data"]["doc"]["kdr"])
-            kdr = kdr[:kdr.index(".") + 3]
-            timeplayed = player1Data["data"]["doc"]["playtime"]
+            prestige = len(player1Data["data"].get("prestiges", [0])) - 1
+
+            xp_progress = player1Data["data"].get("xpProgress", {})
+            display_current_xp = int(xp_progress.get("displayCurrent", 0))
+            level = pit_functions.xpToLevel(prestige, display_current_xp)
+
+            doc = player1Data["data"].get("doc", {})
+            xp = doc.get("xp", 0)
+            gold = doc.get("lifetimeGold", 0)
+            kills = doc.get("kills", 0)
+            deaths = doc.get("deaths", 0)
+            kdr = str(doc.get("kdr", 0.0))
+            kdr = kdr[:kdr.index(".") + 3] if "." in kdr else kdr
+            timeplayed = doc.get("playtime", 0)
 
             player1DataList = [prestige, level, xp, gold, kills, deaths, kdr, timeplayed]
 
-            prestige = len(player2Data["data"]["prestiges"]) - 1
-            level = pit_functions.xpToLevel(prestige, int(player2Data["data"]["xpProgress"]["displayCurrent"]))
-            xp = player2Data["data"]["doc"]["xp"]
-            gold = player2Data["data"]["doc"]["lifetimeGold"]
-            kills = player2Data["data"]["doc"]["kills"]
-            deaths = player2Data["data"]["doc"]["deaths"]
-            kdr = str(player2Data["data"]["doc"]["kdr"])
-            kdr = kdr[:kdr.index(".") + 3]
-            timeplayed = player2Data["data"]["doc"]["playtime"]
+            prestige = len(player2Data["data"].get("prestiges", [0])) - 1
+
+            xp_progress = player2Data["data"].get("xpProgress", {})
+            display_current_xp = int(xp_progress.get("displayCurrent", 0))
+            level = pit_functions.xpToLevel(prestige, display_current_xp)
+
+            doc = player2Data["data"].get("doc", {})
+            xp = doc.get("xp", 0)
+            gold = doc.get("lifetimeGold", 0)
+            kills = doc.get("kills", 0)
+            deaths = doc.get("deaths", 0)
+            kdr = str(doc.get("kdr", 0.0))
+            kdr = kdr[:kdr.index(".") + 3] if "." in kdr else kdr
+            timeplayed = doc.get("playtime", 0)
 
             player2DataList = [prestige, level, xp, gold, kills, deaths, kdr, timeplayed]
 
-            embed = discord.Embed(title=f"[{formatting_functions.int_to_roman(player1DataList[0])}-{player1DataList[1]}] {player1Data['data']['name']} vs [{formatting_functions.int_to_roman(player2DataList[0])}-{player2DataList[1]}] {player2Data['data']['name']}", color=calcBracketColor(max(player1DataList[0], player2DataList[0])))
+            embed = discord.Embed(title=f"[{formatting_functions.int_to_roman(player1DataList[0])}{player1DataList[1]}] {player1Data['data']['name']} vs [{formatting_functions.int_to_roman(player2DataList[0])}{player2DataList[1]}] {player2Data['data']['name']}", color=calcBracketColor(max(player1DataList[0], player2DataList[0])))
 
             signs = []
 
@@ -68,13 +78,14 @@ class compare(commands.Cog):
                 else:
                     signs.append('=')
 
-            embed.add_field(name="Prestige & Level:", value=f"[{formatting_functions.int_to_roman(player1DataList[0])}-{player1DataList[1]}]    {signs[0]}    [{formatting_functions.int_to_roman(player2DataList[0])}-{player2DataList[1]}]", inline=False)
-            embed.add_field(name=" XP Grinded:", value=f"{formatting_functions.add_commas(player1DataList[2])} XP {signs[2]} {formatting_functions.add_commas(player2DataList[2])} XP", inline=False)
-            embed.add_field(name="Gold Grinded:", value=f"{formatting_functions.add_commas(player1DataList[3])} G {signs[3]} {formatting_functions.add_commas(player2DataList[3])} G", inline=False)
-            embed.add_field(name="Kills:", value=f"{formatting_functions.add_commas(player1DataList[4])} {signs[4]} {formatting_functions.add_commas(player2DataList[4])}", inline=False)
-            embed.add_field(name="Deaths:", value=f"{formatting_functions.add_commas(player1DataList[5])} {signs[5]} {formatting_functions.add_commas(player2DataList[5])}", inline=False)
-            embed.add_field(name="KDR:", value=f"{player1DataList[6]} {signs[6]} {player2DataList[6]}", inline=False)
-            embed.add_field(name="Time Played:", value=f"{formatting_functions.format_playtime(int(player1DataList[7]))} {signs[7]} {formatting_functions.format_playtime(int(player2DataList[7]))}", inline=False)
+            embed.add_field(name="Prestige & Level:", value=f"[{formatting_functions.int_to_roman(player1DataList[0])}{player1DataList[1]}]    {signs[0]}    [{formatting_functions.int_to_roman(player2DataList[0])}{player2DataList[1]}]", inline=False)
+            embed.add_field(name="<:xpbottle:1245974825865056276> XP Grinded:", value=f"{formatting_functions.add_commas(player1DataList[2])} XP {signs[2]} {formatting_functions.add_commas(player2DataList[2])} XP", inline=False)
+            embed.add_field(name="<:goldingot:1247391882968043652> Gold Grinded:", value=f"{formatting_functions.add_commas(player1DataList[3])} G {signs[3]} {formatting_functions.add_commas(player2DataList[3])} G", inline=False)
+            embed.add_field(name="<:ironsword:1247392632129323080> Kills:", value=f"{formatting_functions.add_commas(player1DataList[4])} {signs[4]} {formatting_functions.add_commas(player2DataList[4])}", inline=False)
+            embed.add_field(name="<:ironchestplate:1247719811857907762> Deaths:", value=f"{formatting_functions.add_commas(player1DataList[5])} {signs[5]} {formatting_functions.add_commas(player2DataList[5])}", inline=False)
+            embed.add_field(name="<:diamondsword:1247404240016773231> KDR:", value=f"{player1DataList[6]} {signs[6]} {player2DataList[6]}", inline=False)
+            embed.add_field(name="<a:minecraftclock:1247400003786510479> Time Played:", value=f"{formatting_functions.format_playtime(int(player1DataList[7]))} {signs[7]} {formatting_functions.format_playtime(int(player2DataList[7]))}", inline=False)
+            embed.set_footer(text=footerDateGen())
 
             if player1DataList[0] > player2DataList[0]:
                 embed.set_thumbnail(url=f"https://visage.surgeplay.com/face/512/{player1Data['data']['uuid']}?format=webp")
@@ -100,25 +111,31 @@ class compare(commands.Cog):
             await interaction.response.send_message(embed=embedFail, ephemeral=True)  # noqa
 
         else:
-            prestige = len(data["data"]["prestiges"]) - 1
-            level = pit_functions.xpToLevel(prestige, int(data["data"]["xpProgress"]["displayCurrent"]))
-            xp = data["data"]["doc"]["xp"]
-            gold = data["data"]["doc"]["lifetimeGold"]
-            kills = data["data"]["doc"]["kills"]
-            deaths = data["data"]["doc"]["deaths"]
-            kdr = str(data["data"]["doc"]["kdr"])
-            kdr = kdr[:kdr.index(".") + 3]
-            timeplayed = data["data"]["doc"]["playtime"]
+
+            prestige = len(data["data"].get("prestiges", [0])) - 1
+
+            xp_progress = data["data"].get("xpProgress", {})
+            display_current_xp = int(xp_progress.get("displayCurrent", 0))
+            level = pit_functions.xpToLevel(prestige, display_current_xp)
+
+            doc = data["data"].get("doc", {})
+            xp = doc.get("xp", 0)
+            gold = doc.get("lifetimeGold", 0)
+            kills = doc.get("kills", 0)
+            deaths = doc.get("deaths", 0)
+            kdr = str(doc.get("kdr", 0.0))
+            kdr = kdr[:kdr.index(".") + 3] if "." in kdr else kdr
+            timeplayed = doc.get("playtime", 0)
             timeplayed = formatting_functions.format_playtime(int(timeplayed))
 
-            embed = discord.Embed(title=f"Player Stats for [{formatting_functions.int_to_roman(prestige)}-{level}] {data['data']['name']}", color=calcBracketColor(int(prestige)))
-            embed.add_field(name="Prestige & Level:", value=f"[{formatting_functions.int_to_roman(prestige)}-{level}]", inline=False)
-            embed.add_field(name="XP Grinded:", value=f"{formatting_functions.add_commas(xp)} XP", inline=False)
-            embed.add_field(name="Gold Grinded:", value=f"{formatting_functions.add_commas(gold)} G", inline=False)
-            embed.add_field(name="Kills:", value=f"{formatting_functions.add_commas(kills)}", inline=False)
-            embed.add_field(name="Deaths:", value=f"{formatting_functions.add_commas(deaths)}", inline=False)
-            embed.add_field(name="KDR:", value=f"{kdr}", inline=False)
-            embed.add_field(name="Time Played", value=f"{timeplayed}", inline=False)
+            embed = discord.Embed(title=f"Player Stats for [{formatting_functions.int_to_roman(prestige)}{level}] {data['data']['name']}", color=calcBracketColor(int(prestige)))
+            embed.add_field(name=f"{pit_functions.getBracketColorEmoji(prestige)} Prestige & Level:", value=f"[{formatting_functions.int_to_roman(prestige)}{level}]", inline=False)
+            embed.add_field(name="<:xpbottle:1245974825865056276> XP Grinded:", value=f"{formatting_functions.add_commas(xp)} XP", inline=False)
+            embed.add_field(name="<:goldingot:1247391882968043652> Gold Grinded:", value=f"{formatting_functions.add_commas(gold)} G", inline=False)
+            embed.add_field(name="<:ironsword:1247392632129323080> Kills:", value=f"{formatting_functions.add_commas(kills)}", inline=False)
+            embed.add_field(name="<:ironchestplate:1247719811857907762> Deaths:", value=f"{formatting_functions.add_commas(deaths)}", inline=False)
+            embed.add_field(name="<:diamondsword:1247404240016773231> KDR:", value=f"{kdr}", inline=False)
+            embed.add_field(name="<a:minecraftclock:1247400003786510479> Time Played:", value=f"{timeplayed}", inline=False)
             embed.set_footer(text=footerDateGen())
             embed.set_thumbnail(url=f"https://visage.surgeplay.com/face/512/{data['data']['uuid']}?format=webp")
 
