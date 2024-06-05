@@ -1,4 +1,8 @@
 from useful_things.file_functions import read_specific_line
+from useful_things.api_functions import getInfo
+from useful_things import formatting_functions
+
+import json
 
 
 def calcBracketColor(prestige: int):
@@ -96,3 +100,36 @@ def calculateFactionTier(points: int):
             return pointsBreakdown.index(pointCategory)
 
     return 7
+
+
+def getLeaderboardPosition(lb: str, player: str):
+    with open("../PitStats/tokens_and_keys/PP_API_KEY.json", 'r') as f:
+        data = json.load(f)
+        key = data['TOKEN']
+
+    i = 0
+    ranking = 0
+    while True:
+        urlPP: str = f"https://pitpanda.rocks/api/leaderboard/{lb}?page={i}&pageSize=500&{key}"
+        leaderboard = getInfo(urlPP)
+
+        if not leaderboard["success"]:
+            print(urlPP)
+            try:
+                print(leaderboard["error"])
+            except KeyError:
+                print("invalid url")
+            return
+        else:
+            leaderboard = leaderboard["leaderboard"]
+
+            for lbPlayer in leaderboard:
+                ranking += 1
+                name = formatting_functions.extract_name(lbPlayer["name"])
+                if name.lower() == player.lower():
+                    return ranking
+            i += 1
+
+            if i >= 5:
+                return 99999999
+

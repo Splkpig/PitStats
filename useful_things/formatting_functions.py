@@ -90,3 +90,15 @@ def format_playtime(playtime_minutes):
         months = int(total_days // DAYS_IN_MONTH)
         days = total_days % DAYS_IN_MONTH
         return f"{months} mo, {days:.0f} d"
+
+
+def extract_name(input_string):
+    # Find the position of the last instance of '§b'
+    last_index = input_string.rfind(' ')
+
+    if last_index != -1:
+        # Extract the substring after the last '§b'
+        name = input_string[last_index + 3:]
+        return name
+    else:
+        return None

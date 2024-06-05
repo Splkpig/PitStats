@@ -4,15 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b8e38590-9912-446b-8fce-1a99f181b913" name="Changes" comment="file moves and added new commands to help">
-      <change afterPath="$PROJECT_DIR$/useful_things/emotes.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/PitStats.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/PitStats.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="b8e38590-9912-446b-8fce-1a99f181b913" name="Changes" comment="added emojis to most embeds and catching for undefined stats">
+      <change afterPath="$PROJECT_DIR$/commands/leaderboards.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commands/basic.py" beforeDir="false" afterPath="$PROJECT_DIR$/commands/basic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commands/map_quests.py" beforeDir="false" afterPath="$PROJECT_DIR$/commands/map_quests.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commands/prestige_calculations.py" beforeDir="false" afterPath="$PROJECT_DIR$/commands/prestige_calculations.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commands/stats.py" beforeDir="false" afterPath="$PROJECT_DIR$/commands/stats.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/useful_things/formatting_functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/useful_things/formatting_functions.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/useful_things/pit_functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/useful_things/pit_functions.py" afterDir="false" />
     </list>
@@ -100,7 +95,7 @@
       <workItem from="1717346905009" duration="6143000" />
       <workItem from="1717364942212" duration="4435000" />
       <workItem from="1717470769158" duration="5895000" />
-      <workItem from="1717549673721" duration="6970000" />
+      <workItem from="1717549673721" duration="19890000" />
     </task>
     <task id="LOCAL-00001" summary="first commit">
       <option name="closed" value="true" />
@@ -150,7 +145,15 @@
       <option name="project" value="LOCAL" />
       <updated>1717350375946</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="added emojis to most embeds and catching for undefined stats">
+      <option name="closed" value="true" />
+      <created>1717557254698</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1717557254698</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -162,11 +165,12 @@
     <MESSAGE value="progress on overall stats command and added genesis command" />
     <MESSAGE value="added compare command and finished overview command" />
     <MESSAGE value="file moves and added new commands to help" />
-    <option name="LAST_COMMIT_MESSAGE" value="file moves and added new commands to help" />
+    <MESSAGE value="added emojis to most embeds and catching for undefined stats" />
+    <option name="LAST_COMMIT_MESSAGE" value="added emojis to most embeds and catching for undefined stats" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/PitStats$pitpanda_signatures.coverage" NAME="pitpanda_signatures Coverage Results" MODIFIED="1716513805445" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/commands" />
-    <SUITE FILE_PATH="coverage/PitStats$main.coverage" NAME="main Coverage Results" MODIFIED="1717557052373" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/PitStats$main.coverage" NAME="main Coverage Results" MODIFIED="1717570406891" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/PitStats$json.coverage" NAME="json Coverage Results" MODIFIED="1716513691824" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/useful_things" />
     <SUITE FILE_PATH="coverage/PitStats$pitpanda.coverage" NAME="pitpanda Coverage Results" MODIFIED="1716523714871" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/commands" />
     <SUITE FILE_PATH="coverage/PitStats$slash_commands.coverage" NAME="slash_commands Coverage Results" MODIFIED="1716446415161" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
