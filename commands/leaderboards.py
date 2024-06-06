@@ -46,7 +46,7 @@ class leaderboards(commands.Cog):
 
             await interaction.response.defer() # noqa
 
-            for i in range(0, 24):
+            for i in range(0, len(leaderboardsList) - 1):
                 playersRankings.append({leaderboardsFormatedList[i]: pit_functions.getLeaderboardPosition(leaderboardsList[i], player)})
                 # print(f"finished {leaderboardsList[i]}")
                 await asyncio.sleep(4)
