@@ -131,5 +131,5 @@ def getLeaderboardPosition(lb: str, player: str):
             i += 1
 
             if i >= 5:
-                return 99999999
+                return 999999
 
