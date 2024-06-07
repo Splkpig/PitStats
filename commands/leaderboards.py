@@ -98,38 +98,44 @@ class simpleView(discord.ui.View):
 
         if currentPage == -1:
             currentPage = 0
-
-        if currentPage <= 0:
             embed = embedPages[currentPage]
             view = simpleView(timeout=None)
 
-            await interaction.response.edit_message(embed=embed, view=view)  # noqa
+            await interaction.response.edit_message(embed=embed, view=view) # noqa
+        elif currentPage == 0:
+            embed = embedPages[currentPage]
+            view = simpleView(timeout=None)
+
+            await interaction.response.edit_message(embed=embed, view=view) # noqa
         else:
             embed = embedPages[currentPage - 1]
-            view = simpleView(timeout=None)
             currentPage -= 1
+            view = simpleView(timeout=None)
 
-            await interaction.response.edit_message(embed=embed, view=view)  # noqa
+            await interaction.response.edit_message(embed=embed, view=view) # noqa
 
     @discord.ui.button(label="➡️", style=discord.ButtonStyle.blurple)
     async def forward(self, interaction: discord.Interaction, button: discord.ui.Button):
         global currentPage
         global embedPages
 
-        if currentPage <= 0:
-            currentPage += 1
-
-        if currentPage == len(embedPages) - 1:
+        if currentPage == -1:
+            currentPage = 0
             embed = embedPages[currentPage]
             view = simpleView(timeout=None)
 
-            await interaction.response.edit_message(embed=embed, view=view)  # noqa
+            await interaction.response.edit_message(embed=embed, view=view) # noqa
+        elif currentPage == len(embedPages) - 1:
+            embed = embedPages[currentPage]
+            view = simpleView(timeout=None)
+
+            await interaction.response.edit_message(embed=embed, view=view) # noqa
         else:
-            embed = embedPages[currentPage]
-            view = simpleView(timeout=None)
+            embed = embedPages[currentPage + 1]
             currentPage += 1
+            view = simpleView(timeout=None)
 
-            await interaction.response.edit_message(embed=embed, view=view)  # noqa
+            await interaction.response.edit_message(embed=embed, view=view) # noqa
 
 
 class leaderboards(commands.Cog):

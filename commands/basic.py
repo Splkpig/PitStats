@@ -33,16 +33,19 @@ class simpleView(discord.ui.View):
 
         if currentPage == -1:
             currentPage = 0
+            embed = helpPages[currentPage]
+            view = simpleView(timeout=None)
 
-        if currentPage <= 0:
+            await interaction.response.edit_message(embed=embed, view=view) # noqa
+        elif currentPage == 0:
             embed = helpPages[currentPage]
             view = simpleView(timeout=None)
 
             await interaction.response.edit_message(embed=embed, view=view) # noqa
         else:
             embed = helpPages[currentPage - 1]
-            view = simpleView(timeout=None)
             currentPage -= 1
+            view = simpleView(timeout=None)
 
             await interaction.response.edit_message(embed=embed, view=view) # noqa
 
@@ -51,18 +54,21 @@ class simpleView(discord.ui.View):
         global currentPage
         global helpPages
 
-        if currentPage <= 0:
-            currentPage += 1
+        if currentPage == -1:
+            currentPage = 0
+            embed = helpPages[currentPage]
+            view = simpleView(timeout=None)
 
-        if currentPage == len(helpPages) - 1:
+            await interaction.response.edit_message(embed=embed, view=view) # noqa
+        elif currentPage == len(helpPages) - 1:
             embed = helpPages[currentPage]
             view = simpleView(timeout=None)
 
             await interaction.response.edit_message(embed=embed, view=view) # noqa
         else:
-            embed = helpPages[currentPage]
-            view = simpleView(timeout=None)
+            embed = helpPages[currentPage + 1]
             currentPage += 1
+            view = simpleView(timeout=None)
 
             await interaction.response.edit_message(embed=embed, view=view) # noqa
 
