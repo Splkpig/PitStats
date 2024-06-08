@@ -102,3 +102,11 @@ def extract_name(input_string):
         return name
     else:
         return None
+
+
+def formatRankingsData(listToFormat):
+    blackListed = ['damageRatio', 'highestStreak', 'kdr', 'tierOnes', 'tierTwos', 'darkPantsT2', 'totalJumps', 'bounty', 'genesisPoints', 'joins', 'bowAccuracy', 'swordHits', 'meleeDamageDealt', 'meleeDamageReceived', 'meleeDamageRatio', 'bowDamageDealt', 'bowDamageReceived', 'bowDamageRatio', 'xpHourly', 'goldHourly', 'killsHourly', 'kadr', 'killAssistHourly', 'contractsStarted', 'contractsRatio', 'ingotsGold']
+
+    return [value if key in blackListed else (value if isinstance(value, (int, float)) else 999999) for key, value in listToFormat.items() if key not in blackListed]
+
+
