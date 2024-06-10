@@ -102,16 +102,16 @@ def calculateFactionTier(points: int):
     return 7
 
 
-def getLeaderboardPosition(lb: str, player: str):
+def getLeaderboardData(lb: str, players: int, page: int):
     with open("../PitStats/tokens_and_keys/PP_API_KEY.json", 'r') as f:
         data = json.load(f)
         key = data['TOKEN']
 
-    i = 0
-    ranking = 0
     while True:
-        urlPP: str = f"https://pitpanda.rocks/api/leaderboard/{lb}?page={i}&pageSize=500&{key}"
+        urlPP: str = f"https://pitpanda.rocks/api/leaderboard/{lb}?page={page}&pageSize={players}&{key}"
         leaderboard = getInfo(urlPP)
+
+        players = []
 
         if not leaderboard["success"]:
             print(urlPP)
@@ -124,12 +124,10 @@ def getLeaderboardPosition(lb: str, player: str):
             leaderboard = leaderboard["leaderboard"]
 
             for lbPlayer in leaderboard:
-                ranking += 1
-                name = formatting_functions.extract_name(lbPlayer["name"])
-                if name.lower() == player.lower():
-                    return ranking
-            i += 1
+                players.append(formatting_functions.extract_name(lbPlayer["name"]))
 
-            if i >= 5:
-                return 999999
+        return players
+
+
+
 

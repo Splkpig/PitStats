@@ -1,5 +1,7 @@
 import re
 
+import discord
+
 
 def add_commas(number):
     return "{:,}".format(number)
@@ -110,3 +112,9 @@ def formatRankingsData(listToFormat):
     return [value if key in blackListed else (value if isinstance(value, (int, float)) else 999999) for key, value in listToFormat.items() if key not in blackListed]
 
 
+def leaderboardEmbed(players, embed, page):
+    i = 1
+    for player in players:
+        embed.add_field(name=f"{player}", value=f"#{page * 10 + i}", inline=False)
+        i += 1
+    return embed
