@@ -4,12 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b8e38590-9912-446b-8fce-1a99f181b913" name="Changes" comment="added viewing for specific leaderbords, removed top 10 for all">
+    <list default="true" id="b8e38590-9912-446b-8fce-1a99f181b913" name="Changes" comment="added top 10 players for each leaderboard command, added leaderboard commands to help">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commands/basic.py" beforeDir="false" afterPath="$PROJECT_DIR$/commands/basic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commands/leaderboards.py" beforeDir="false" afterPath="$PROJECT_DIR$/commands/leaderboards.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/useful_things/formatting_functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/useful_things/formatting_functions.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/useful_things/pit_functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/useful_things/pit_functions.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -104,7 +100,7 @@
       <workItem from="1717855726747" duration="1047000" />
       <workItem from="1717856800958" duration="18000" />
       <workItem from="1718029826822" duration="5506000" />
-      <workItem from="1718059015811" duration="7247000" />
+      <workItem from="1718059015811" duration="9051000" />
     </task>
     <task id="LOCAL-00001" summary="first commit">
       <option name="closed" value="true" />
@@ -218,7 +214,15 @@
       <option name="project" value="LOCAL" />
       <updated>1718036104431</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="added top 10 players for each leaderboard command, added leaderboard commands to help">
+      <option name="closed" value="true" />
+      <created>1718066559971</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1718066559971</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -238,11 +242,12 @@
     <MESSAGE value="improved embed scrolling logic" />
     <MESSAGE value="made viewing a players top leaderboards much faster" />
     <MESSAGE value="added viewing for specific leaderbords, removed top 10 for all" />
-    <option name="LAST_COMMIT_MESSAGE" value="added viewing for specific leaderbords, removed top 10 for all" />
+    <MESSAGE value="added top 10 players for each leaderboard command, added leaderboard commands to help" />
+    <option name="LAST_COMMIT_MESSAGE" value="added top 10 players for each leaderboard command, added leaderboard commands to help" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/PitStats$pitpanda_signatures.coverage" NAME="pitpanda_signatures Coverage Results" MODIFIED="1716513805445" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/commands" />
-    <SUITE FILE_PATH="coverage/PitStats$main.coverage" NAME="main Coverage Results" MODIFIED="1718066010413" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/PitStats$main.coverage" NAME="main Coverage Results" MODIFIED="1718066425860" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/PitStats$leaderboards.coverage" NAME="leaderboards Coverage Results" MODIFIED="1717692141062" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/commands" />
     <SUITE FILE_PATH="coverage/PitStats$json.coverage" NAME="json Coverage Results" MODIFIED="1716513691824" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/useful_things" />
     <SUITE FILE_PATH="coverage/PitStats$pitpanda.coverage" NAME="pitpanda Coverage Results" MODIFIED="1716523714871" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/commands" />
