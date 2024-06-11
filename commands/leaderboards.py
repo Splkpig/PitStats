@@ -28,6 +28,7 @@ class simpleView(discord.ui.View):
             embed = discord.Embed(title=f"{globalLeaderboardsFormatedList[globalLeaderboardsList.index(globalLeaderboard)]} Page: {currentPage + 1}", color=discord.Color.greyple())
             embed = formatting_functions.leaderboardEmbed(pit_functions.getLeaderboardData(globalLeaderboard, 10, currentPage), embed, currentPage)
             view = simpleView(timeout=None)
+            embed.set_footer(text=footerDateGen())
 
             await interaction.response.edit_message(embed=embed, view=view) # noqa
         else:
@@ -35,6 +36,7 @@ class simpleView(discord.ui.View):
             embed = formatting_functions.leaderboardEmbed(pit_functions.getLeaderboardData(globalLeaderboard, 10, currentPage - 1), embed, currentPage - 1)
             currentPage -= 1
             view = simpleView(timeout=None)
+            embed.set_footer(text=footerDateGen())
 
             await interaction.response.edit_message(embed=embed, view=view) # noqa
 
@@ -46,7 +48,50 @@ class simpleView(discord.ui.View):
         embed = formatting_functions.leaderboardEmbed(pit_functions.getLeaderboardData(globalLeaderboard, 10, currentPage + 1), embed, currentPage + 1)
         currentPage += 1
         view = simpleView(timeout=None)
+        embed.set_footer(text=footerDateGen())
 
+        await interaction.response.edit_message(embed=embed, view=view) # noqa
+
+
+currentPageAll = 0
+
+
+class simpleViewAll(discord.ui.View):
+    @discord.ui.button(label="⬅️", style=discord.ButtonStyle.blurple)
+    async def back(self, interaction: discord.Interaction, button: discord.ui.Button):
+        global currentPageAll
+        global globalLeaderboard
+
+        if currentPageAll == 0:
+            embed = discord.Embed(title=f"{globalLeaderboardsFormatedList[currentPageAll]}", color=discord.Color.greyple())
+            embed = formatting_functions.leaderboardEmbedAll(pit_functions.getLeaderboardDataAll(globalLeaderboardsList[currentPageAll], 10), embed)
+            view = simpleViewAll(timeout=None)
+
+        else:
+            embed = discord.Embed(title=f"{globalLeaderboardsFormatedList[currentPageAll - 1]}", color=discord.Color.greyple())
+            embed = formatting_functions.leaderboardEmbedAll(pit_functions.getLeaderboardDataAll(globalLeaderboardsList[currentPageAll - 1], 10,), embed)
+            currentPageAll -= 1
+            view = simpleViewAll(timeout=None)
+
+        embed.set_footer(text=f"Current Page: {currentPageAll + 1} / {len(globalLeaderboardsList)}")
+        await interaction.response.edit_message(embed=embed, view=view) # noqa
+
+    @discord.ui.button(label="➡️", style=discord.ButtonStyle.blurple)
+    async def forward(self, interaction: discord.Interaction, button: discord.ui.Button):
+        global currentPageAll
+
+        if currentPageAll == len(globalLeaderboardsList) - 1:
+            embed = discord.Embed(title=f"{globalLeaderboardsFormatedList[currentPageAll]}", color=discord.Color.greyple())
+            embed = formatting_functions.leaderboardEmbedAll(pit_functions.getLeaderboardDataAll(globalLeaderboardsList[currentPageAll], 10), embed)
+            view = simpleViewAll(timeout=None)
+
+        else:
+            embed = discord.Embed(title=f"{globalLeaderboardsFormatedList[currentPageAll + 1]}", color=discord.Color.greyple())
+            embed = formatting_functions.leaderboardEmbedAll(pit_functions.getLeaderboardDataAll(globalLeaderboardsList[currentPageAll + 1], 10), embed)
+            currentPageAll += 1
+            view = simpleViewAll(timeout=None)
+
+        embed.set_footer(text=f"Current Page: {currentPageAll + 1} / {len(globalLeaderboardsList)}")
         await interaction.response.edit_message(embed=embed, view=view) # noqa
 
 
@@ -94,7 +139,7 @@ class leaderboards(commands.Cog):
 
             for i in range(0, len(rankingsFormatted)):
                 playersRankings.append({leaderboardsFormatedList[i]: rankingsFormatted[i]})
-                print(f"finished {leaderboardsFormatedList[i][leaderboardsFormatedList[i].index(' ') + 1:]}")
+                # print(f"finished {leaderboardsFormatedList[i][leaderboardsFormatedList[i].index(' ') + 1:]}")
 
             sorted_leaderboards = sorted(playersRankings, key=lambda x: list(x.values())[0], reverse=False)
             top25 = sorted_leaderboards[:25]
@@ -103,6 +148,12 @@ class leaderboards(commands.Cog):
                 leaderboard_name, ranking = leaderboard.popitem()
                 if ranking == 999999:
                     embed.add_field(name=f"{leaderboard_name}:", value="N/A", inline=False)
+                elif ranking == 1:
+                    embed.add_field(name=f"{leaderboard_name}:", value=f":first_place: #{ranking}", inline=False)
+                elif ranking <= 10:
+                    embed.add_field(name=f"{leaderboard_name}:", value=f":second_place: #{ranking}", inline=False)
+                elif ranking <= 100:
+                    embed.add_field(name=f"{leaderboard_name}:", value=f":third_place: #{ranking}", inline=False)
                 else:
                     embed.add_field(name=f"{leaderboard_name}:", value=f"#{ranking}", inline=False)
 
@@ -112,24 +163,69 @@ class leaderboards(commands.Cog):
             await interaction.followup.send(embed=embed)  # noqa
 
     @app_commands.command(name="leaderboard", description="Shows a leaderboard")
-    @app_commands.choices(leaderboard=[app_commands.Choice(name='Kills', value="Kills"), app_commands.Choice(name='Assists', value="Assists"), app_commands.Choice(name='Damage Dealt', value="Damage Dealt"), app_commands.Choice(name='Damage Received', value="Damage Received"), app_commands.Choice(name='Deaths', value="Deaths"), app_commands.Choice(name='Total XP', value="Total XP"), app_commands.Choice(name='Current Gold', value="Current Gold"), app_commands.Choice(name='Lifetime Gold', value="Lifetime Gold"), app_commands.Choice(name='Playtime', value="Playtime"), app_commands.Choice(name='Contracts Completed', value="Contracts Completed"), app_commands.Choice(name='Golden Apples Eaten', value="Golden Apples Eaten"), app_commands.Choice(name='Golden Heads', value="Golden Heads"), app_commands.Choice(name='Lava Buckets Emptied', value="Lava Buckets Emptied"), app_commands.Choice(name='Soups Drank', value="Soups Drank"), app_commands.Choice(name='Mystics Enchanted', value="Mystics Enchanted"), app_commands.Choice(name='Dark Pants Created', value="Dark Pants Created"), app_commands.Choice(name='Left Clicks', value="Left Clicks"), app_commands.Choice(name='Chat Messages', value="Chat Messages"), app_commands.Choice(name='Wheat Farmed', value="Wheat Farmed"), app_commands.Choice(name='Fished Anything', value="Fished Anything"), app_commands.Choice(name='Blocks Broken', value="Blocks Broken"), app_commands.Choice(name='Blocks Placed', value="Blocks Placed"), app_commands.Choice(name='Kings Quest Completions', value="Kings Quest Completions"), app_commands.Choice(name='Sewer Treasures', value="Sewer Treasures"), app_commands.Choice(name='Night Quests', value="Night Quests")])
+    @app_commands.choices(leaderboard=[app_commands.Choice(name='Total XP', value="xp"), app_commands.Choice(name='Current Gold', value="gold"), app_commands.Choice(name='Lifetime Gold', value="lifetimeGold"), app_commands.Choice(name='Playtime', value="playtime"), app_commands.Choice(name='Contracts Completed', value="contracts"), app_commands.Choice(name='Chat Messages', value="chatMessages"), app_commands.Choice(name='Wheat Farmed', value="wheatFarmed"), app_commands.Choice(name='Fished Anything', value="fishedAnything"), app_commands.Choice(name='Blocks Broken', value="blocksBroken"), app_commands.Choice(name='Blocks Placed', value="blocksPlaced"), app_commands.Choice(name='Kings Quest Completions', value="kingsQuests"), app_commands.Choice(name='Sewer Treasures', value="sewerTreasures"), app_commands.Choice(name='Night Quests', value="nightQuests"), app_commands.Choice(name='Current Renown', value="renown"), app_commands.Choice(name='Lifetime Renown', value="lifetimeRenown"), app_commands.Choice(name='Jumps into Mid', value="jumpsIntoPit"), app_commands.Choice(name='Launcher Launches', value="launcherLaunches"), app_commands.Choice(name='Enderchests Opened', value="enderchestOpened"), app_commands.Choice(name='Diamond Items Purchased', value="diamondItemsPurchased"), app_commands.Choice(name='Fished Fish', value="fishedFish"), app_commands.Choice(name='Hidden Jewels Triggered', value="hiddenJewelsTriggered"), app_commands.Choice(name='Fishing Rod Casts', value="fishingRodCasts"), app_commands.Choice(name='Dark Pants Created', value="darkPants"), app_commands.Choice(name='Obsidian Broken', value="obsidianBroken"), app_commands.Choice(name='Ingots Gathered', value="ingotsPickedUp")])
     async def leaderboard(self, interaction: discord.Interaction, leaderboard: str):
         global globalLeaderboard
         global currentPage
         currentPage = 0
-        globalLeaderboard = globalLeaderboardsList[globalLeaderboardsNameList.index(leaderboard)]
+        globalLeaderboard = leaderboard
 
         await interaction.response.defer() # noqa
 
-        embed = discord.Embed(title=f"{globalLeaderboardsFormatedList[globalLeaderboardsNameList.index(leaderboard)]} Page: {currentPage + 1}", color=discord.Color.greyple())
+        embed = discord.Embed(title=f"{globalLeaderboardsFormatedList[globalLeaderboardsList.index(leaderboard)]} Page: {currentPage + 1}", color=discord.Color.greyple())
         i = 1
 
-        for player in pit_functions.getLeaderboardData(globalLeaderboardsList[globalLeaderboardsNameList.index(leaderboard)], 10, 0):
-            embed.add_field(name=f"{player}", value=f"#{i}", inline=False)
+        for player in pit_functions.getLeaderboardData(leaderboard, 10, 0):
+            embed.add_field(name=f"#{i}:", value=f"{player}", inline=False)
             i += 1
+
+        embed.set_footer(text=footerDateGen())
 
         view = simpleView(timeout=None)
         await interaction.followup.send(embed=embed, view=view)
+
+    @app_commands.command(name="leaderboard-combat", description="Shows a combat related leaderboard")
+    @app_commands.choices(leaderboard=[app_commands.Choice(name='Kills', value="kills"), app_commands.Choice(name='Assists', value="assists"), app_commands.Choice(name='Damage Dealt', value="damageDealt"), app_commands.Choice(name='Damage Received', value="damageReceived"), app_commands.Choice(name='Deaths', value="deaths"), app_commands.Choice(name='Golden Apples Eaten', value="gapples"), app_commands.Choice(name='Golden Heads', value="gheads"), app_commands.Choice(name='Lava Buckets Emptied', value="lavaBuckets"), app_commands.Choice(name='Soups Drank', value="soups"), app_commands.Choice(name='Mystics Enchanted', value="tierThrees"), app_commands.Choice(name='Left Clicks', value="leftClicks"), app_commands.Choice(name='Arrows Shot', value="arrowShots"), app_commands.Choice(name='Arrow Hits', value="arrowHits"), app_commands.Choice(name='Bounties Claimed', value="bountiesClaimed"), app_commands.Choice(name='Rage Potatoes Eaten', value="ragePotatoesEaten"), app_commands.Choice(name='Vampire Healing', value="vampireHealedHp")])
+    async def leaderboardCombat(self, interaction: discord.Interaction, leaderboard: str):
+        global globalLeaderboard
+        global currentPage
+        currentPage = 0
+        globalLeaderboard = leaderboard
+
+        await interaction.response.defer() # noqa
+
+        embed = discord.Embed(title=f"{globalLeaderboardsFormatedList[globalLeaderboardsList.index(leaderboard)]} Page: {currentPage + 1}", color=discord.Color.greyple())
+        i = 1
+
+        for player in pit_functions.getLeaderboardData(leaderboard, 10, 0):
+            embed.add_field(name=f"#{i}:", value=f"{player}", inline=False)
+            i += 1
+
+        embed.set_footer(text=footerDateGen())
+
+        view = simpleView(timeout=None)
+        await interaction.followup.send(embed=embed, view=view)
+
+    @app_commands.command(name="leaderboards", description="Shows the top 10 of every leaderboard")
+    async def leaderboardsAll(self, interaction: discord.Interaction):
+        global currentPageAll
+        currentPageAll = 0
+
+        await interaction.response.defer() # noqa
+
+        embed = discord.Embed(title=f"{globalLeaderboardsFormatedList[currentPageAll]}", color=discord.Color.greyple())
+        i = 1
+
+        for player in pit_functions.getLeaderboardData(globalLeaderboardsList[currentPageAll], 10, 0):
+            embed.add_field(name=f"#{i}:", value=f"{player}", inline=False)
+            i += 1
+
+        embed.set_footer(text=f"Current Page: {currentPageAll + 1} / {len(globalLeaderboardsList)}")
+
+        view = simpleViewAll(timeout=None)
+        await interaction.followup.send(embed=embed, view=view)
+
+
 
 
 async def setup(client: commands.Bot) -> None:

@@ -115,6 +115,24 @@ def formatRankingsData(listToFormat):
 def leaderboardEmbed(players, embed, page):
     i = 1
     for player in players:
-        embed.add_field(name=f"{player}", value=f"#{page * 10 + i}", inline=False)
+        if player == 'Splkpig':
+            player = f'<:splkpig:1172711478223188068> {player}'
+        elif player == 'Reyertic':
+            player = f'<:reyerticicon:1197414722564276335> {player}'
+
+        embed.add_field(name=f"#{page * 10 + i}:", value=f"{player}", inline=False)
+        i += 1
+    return embed
+
+
+def leaderboardEmbedAll(players, embed):
+    i = 1
+    for player in players:
+        if player == 'Splkpig':
+            player = f'<:splkpig:1172711478223188068> {player}'
+        elif player == 'Reyertic':
+            player = f'<:reyerticicon:1197414722564276335> {player}'
+
+        embed.add_field(name=f"#{i}:", value=f"{player}", inline=False)
         i += 1
     return embed

@@ -129,5 +129,32 @@ def getLeaderboardData(lb: str, players: int, page: int):
         return players
 
 
+def getLeaderboardDataAll(lb: str, players: int):
+    with open("../PitStats/tokens_and_keys/PP_API_KEY.json", 'r') as f:
+        data = json.load(f)
+        key = data['TOKEN']
+
+    while True:
+        urlPP: str = f"https://pitpanda.rocks/api/leaderboard/{lb}?page=0&pageSize={players}&{key}"
+        leaderboard = getInfo(urlPP)
+
+        players = []
+
+        if not leaderboard["success"]:
+            print(urlPP)
+            try:
+                print(leaderboard["error"])
+            except KeyError:
+                print("invalid url")
+            return
+        else:
+            leaderboard = leaderboard["leaderboard"]
+
+            for lbPlayer in leaderboard:
+                players.append(formatting_functions.extract_name(lbPlayer["name"]))
+
+        return players
+
+
 
 
