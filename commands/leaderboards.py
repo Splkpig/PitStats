@@ -226,7 +226,5 @@ class leaderboards(commands.Cog):
         await interaction.followup.send(embed=embed, view=view)
 
 
-
-
 async def setup(client: commands.Bot) -> None:
     await client.add_cog(leaderboards(client))

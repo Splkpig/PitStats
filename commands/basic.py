@@ -24,11 +24,15 @@ leaderboards.add_field(name="/leaderboard-combat *leaderboard*", value="Displays
 leaderboards.add_field(name="/leaderboards", value="Displays the top 10 players for each leaderboard", inline=False)
 leaderboards.add_field(name="/leaderboard-positions *player*", value="Displays the 25 highest leaderboard positions for a player", inline=False)
 
+sessions = discord.Embed(title="Sessions", color=discord.Color.greyple())
+sessions.add_field(name="/session-start *player*", value="Starts a stat tracking session for a player", inline=False)
+sessions.add_field(name="/session", value="Views your current stat tracking session", inline=False)
+sessions.add_field(name="/session-end", value="Ends your current stat tracking session", inline=False)
 
 funCommands = discord.Embed(title="Fun Commands", color=discord.Color.greyple())
 funCommands.add_field(name="/jenna *player*", value="Compares a player's yapping to Jenna's", inline=False)
 
-helpPages = [pitpandaSignatures, prestigeCalculations, mapQuests, stats, leaderboards, funCommands]
+helpPages = [pitpandaSignatures, prestigeCalculations, mapQuests, stats, leaderboards, sessions, funCommands]
 currentPage = -1
 
 
