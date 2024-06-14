@@ -29,10 +29,13 @@ sessions.add_field(name="/session-start *player*", value="Starts a stat tracking
 sessions.add_field(name="/session", value="Views your current stat tracking session", inline=False)
 sessions.add_field(name="/session-end", value="Ends your current stat tracking session", inline=False)
 
+upgrades = discord.Embed(title="Upgrades", color=discord.Color.greyple())
+upgrades.add_field(name="/upgrades *player*", value="Shows most purchased upgrades for a player", inline=False)
+
 funCommands = discord.Embed(title="Fun Commands", color=discord.Color.greyple())
 funCommands.add_field(name="/jenna *player*", value="Compares a player's yapping to Jenna's", inline=False)
 
-helpPages = [pitpandaSignatures, prestigeCalculations, mapQuests, stats, leaderboards, sessions, funCommands]
+helpPages = [pitpandaSignatures, prestigeCalculations, mapQuests, stats, leaderboards, sessions, upgrades, funCommands]
 currentPage = -1
 
 
