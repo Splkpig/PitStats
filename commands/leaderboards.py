@@ -93,6 +93,46 @@ class simpleViewAll(discord.ui.View):
         await interaction.response.edit_message(embed=embed, view=view) # noqa
 
 
+leaderboardPositionPage = 0
+leaderboardPositionPages = []
+
+
+class simpleViewPositions(discord.ui.View):
+    @discord.ui.button(label="⬅️", style=discord.ButtonStyle.blurple)
+    async def back(self, interaction: discord.Interaction, button: discord.ui.Button):
+        global leaderboardPositionPage
+        global leaderboardPositionPages
+
+        if leaderboardPositionPage == 0:
+            embed = leaderboardPositionPages[leaderboardPositionPage]
+            view = simpleViewPositions(timeout=None)
+
+        else:
+            embed = leaderboardPositionPages[leaderboardPositionPage - 1]
+            leaderboardPositionPage -= 1
+            view = simpleViewPositions(timeout=None)
+
+        embed.set_footer(text=f"Current Page: {leaderboardPositionPage + 1} / {len(leaderboardPositionPages)}")
+        await interaction.response.edit_message(embed=embed, view=view) # noqa
+
+    @discord.ui.button(label="➡️", style=discord.ButtonStyle.blurple)
+    async def forward(self, interaction: discord.Interaction, button: discord.ui.Button):
+        global leaderboardPositionPage
+        global leaderboardPositionPages
+
+        if leaderboardPositionPage == len(leaderboardPositionPages) - 1:
+            embed = leaderboardPositionPages[leaderboardPositionPage]
+            view = simpleViewPositions(timeout=None)
+
+        else:
+            embed = leaderboardPositionPages[leaderboardPositionPage + 1]
+            leaderboardPositionPage += 1
+            view = simpleViewPositions(timeout=None)
+
+        embed.set_footer(text=f"Current Page: {leaderboardPositionPage + 1} / {len(leaderboardPositionPages)}")
+        await interaction.response.edit_message(embed=embed, view=view) # noqa
+
+
 class leaderboards(commands.Cog):
     def __init__(self, client):
         self.client = client
@@ -104,6 +144,12 @@ class leaderboards(commands.Cog):
             player (str): A Minecraft username
         """
         pass
+
+        global leaderboardPositionPage
+        global leaderboardPositionPages
+
+        leaderboardPositionPage = 0
+        leaderboardPositionPages = []
 
         urlPP: str = f"https://pitpanda.rocks/api/players/{player}"
         data = getInfo(urlPP)
@@ -127,9 +173,8 @@ class leaderboards(commands.Cog):
             leaderboardsFormatedList = globalLeaderboardsFormatedList
             playersRankings = []
 
-            embed = discord.Embed(
-                title=f"Leaderboard positions for [{formatting_functions.int_to_roman(currentPrestige)}{currentLevel}] {data['data']['name']}",
-                color=calcBracketColor(currentPrestige))
+            embed = discord.Embed(title=f"Leaderboard positions for [{formatting_functions.int_to_roman(currentPrestige)}{currentLevel}] {data['data']['name']}", color=calcBracketColor(currentPrestige))
+            embed.set_thumbnail(url=f"https://visage.surgeplay.com/face/512/{data['data']['uuid']}?format=webp")
 
             await interaction.response.defer()  # noqa
 
@@ -140,9 +185,13 @@ class leaderboards(commands.Cog):
                 # print(f"finished {leaderboardsFormatedList[i][leaderboardsFormatedList[i].index(' ') + 1:]}")
 
             sorted_leaderboards = sorted(playersRankings, key=lambda x: list(x.values())[0], reverse=False)
-            top25 = sorted_leaderboards[:25]
 
-            for idx, leaderboard in enumerate(top25, start=1):
+            i = 0
+            for idx, leaderboard in enumerate(sorted_leaderboards, start=1):
+                if i % 10 == 0 and i != 0:
+                    leaderboardPositionPages.append(embed)
+                    embed = discord.Embed(title=f"Leaderboard positions for [{formatting_functions.int_to_roman(currentPrestige)}{currentLevel}] {data['data']['name']}", color=calcBracketColor(currentPrestige))
+                    embed.set_thumbnail(url=f"https://visage.surgeplay.com/face/512/{data['data']['uuid']}?format=webp")
                 leaderboard_name, ranking = leaderboard.popitem()
                 if ranking == 999999:
                     embed.add_field(name=f"{leaderboard_name}:", value="N/A", inline=False)
@@ -154,11 +203,15 @@ class leaderboards(commands.Cog):
                     embed.add_field(name=f"{leaderboard_name}:", value=f":third_place: #{ranking}", inline=False)
                 else:
                     embed.add_field(name=f"{leaderboard_name}:", value=f"#{ranking}", inline=False)
+                if i == len(sorted_leaderboards) - 1:
+                    leaderboardPositionPages.append(embed)
+                i += 1
 
-            embed.set_thumbnail(url=f"https://visage.surgeplay.com/face/512/{data['data']['uuid']}?format=webp")
-            embed.set_footer(text=footerDateGen())
+            embed = leaderboardPositionPages[0]
+            embed.set_footer(text=f"Current Page: {leaderboardPositionPage + 1} / {len(leaderboardPositionPages)}")
+            view = simpleViewPositions(timeout=None)
 
-            await interaction.followup.send(embed=embed)  # noqa
+            await interaction.followup.send(embed=embed, view=view)  # noqa
 
     @app_commands.command(name="leaderboard", description="Shows a leaderboard")
     @app_commands.choices(leaderboard=[app_commands.Choice(name='Total XP', value="xp"), app_commands.Choice(name='Current Gold', value="gold"), app_commands.Choice(name='Lifetime Gold', value="lifetimeGold"), app_commands.Choice(name='Playtime', value="playtime"), app_commands.Choice(name='Contracts Completed', value="contracts"), app_commands.Choice(name='Chat Messages', value="chatMessages"), app_commands.Choice(name='Wheat Farmed', value="wheatFarmed"), app_commands.Choice(name='Fished Anything', value="fishedAnything"), app_commands.Choice(name='Blocks Broken', value="blocksBroken"), app_commands.Choice(name='Blocks Placed', value="blocksPlaced"), app_commands.Choice(name='Kings Quest Completions', value="kingsQuests"), app_commands.Choice(name='Sewer Treasures', value="sewerTreasures"), app_commands.Choice(name='Night Quests', value="nightQuests"), app_commands.Choice(name='Current Renown', value="renown"), app_commands.Choice(name='Lifetime Renown', value="lifetimeRenown"), app_commands.Choice(name='Jumps into Mid', value="jumpsIntoPit"), app_commands.Choice(name='Launcher Launches', value="launcherLaunches"), app_commands.Choice(name='Enderchests Opened', value="enderchestOpened"), app_commands.Choice(name='Diamond Items Purchased', value="diamondItemsPurchased"), app_commands.Choice(name='Fished Fish', value="fishedFish"), app_commands.Choice(name='Hidden Jewels Triggered', value="hiddenJewelsTriggered"), app_commands.Choice(name='Fishing Rod Casts', value="fishingRodCasts"), app_commands.Choice(name='Dark Pants Created', value="darkPants"), app_commands.Choice(name='Obsidian Broken', value="obsidianBroken"), app_commands.Choice(name='Ingots Gathered', value="ingotsPickedUp")])
