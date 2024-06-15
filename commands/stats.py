@@ -43,8 +43,7 @@ class compare(commands.Cog):
             gold = doc.get("lifetimeGold", 0)
             kills = doc.get("kills", 0)
             deaths = doc.get("deaths", 0)
-            kdr = str(doc.get("kdr", 0.0))
-            kdr = kdr[:kdr.index(".") + 3] if "." in kdr else kdr
+            kdr = doc.get("kdr", 0.0)
             timeplayed = doc.get("playtime", 0)
 
             player1DataList = [prestige, level, xp, gold, kills, deaths, kdr, timeplayed]
@@ -60,17 +59,20 @@ class compare(commands.Cog):
             gold = doc.get("lifetimeGold", 0)
             kills = doc.get("kills", 0)
             deaths = doc.get("deaths", 0)
-            kdr = str(doc.get("kdr", 0.0))
-            kdr = kdr[:kdr.index(".") + 3] if "." in kdr else kdr
+            kdr = doc.get("kdr", 0.0)
             timeplayed = doc.get("playtime", 0)
 
             player2DataList = [prestige, level, xp, gold, kills, deaths, kdr, timeplayed]
 
-            embed = discord.Embed(title=f"[{formatting_functions.int_to_roman(player1DataList[0])}{player1DataList[1]}] {player1Data['data']['name']} vs [{formatting_functions.int_to_roman(player2DataList[0])}{player2DataList[1]}] {player2Data['data']['name']}", color=calcBracketColor(max(player1DataList[0], player2DataList[0])))
+            winner = 0
+            if player1DataList[0]/player1DataList[7] > player2DataList[0]/player2DataList[7]:
+                winner = 1
+                embed = discord.Embed(title=f"[{formatting_functions.int_to_roman(player1DataList[0])}{player1DataList[1]}] {player1Data['data']['name']} vs [{formatting_functions.int_to_roman(player2DataList[0])}{player2DataList[1]}] {player2Data['data']['name']}", color=calcBracketColor(player1DataList[0]))
+            else:
+                embed = discord.Embed(title=f"[{formatting_functions.int_to_roman(player1DataList[0])}{player1DataList[1]}] {player1Data['data']['name']} vs [{formatting_functions.int_to_roman(player2DataList[0])}{player2DataList[1]}] {player2Data['data']['name']}", color=calcBracketColor(player2DataList[0]))
 
             signs = []
-
-            for i in range(len(player1DataList)):
+            for i in range(0, len(player1DataList)):
                 if player1DataList[i] < player2DataList[i]:
                     signs.append('<')
                 elif player1DataList[i] > player2DataList[i]:
@@ -79,18 +81,19 @@ class compare(commands.Cog):
                     signs.append('=')
 
             embed.add_field(name="Prestige & Level:", value=f"[{formatting_functions.int_to_roman(player1DataList[0])}{player1DataList[1]}]    {signs[0]}    [{formatting_functions.int_to_roman(player2DataList[0])}{player2DataList[1]}]", inline=False)
-            embed.add_field(name="<:xpbottle:1245974825865056276> XP Grinded:", value=f"{formatting_functions.add_commas(player1DataList[2])} XP {signs[2]} {formatting_functions.add_commas(player2DataList[2])} XP", inline=False)
-            embed.add_field(name="<:goldingot:1247391882968043652> Gold Grinded:", value=f"{formatting_functions.add_commas(player1DataList[3])} G {signs[3]} {formatting_functions.add_commas(player2DataList[3])} G", inline=False)
+            embed.add_field(name="<:xpbottle:1245974825865056276> Lifetime XP:", value=f"{formatting_functions.add_commas(player1DataList[2])} XP {signs[2]} {formatting_functions.add_commas(player2DataList[2])} XP", inline=False)
+            embed.add_field(name="<:goldingot:1247391882968043652> Lifetime Gold:", value=f"{formatting_functions.add_commas(player1DataList[3])} G {signs[3]} {formatting_functions.add_commas(player2DataList[3])} G", inline=False)
             embed.add_field(name="<:ironsword:1247392632129323080> Kills:", value=f"{formatting_functions.add_commas(player1DataList[4])} {signs[4]} {formatting_functions.add_commas(player2DataList[4])}", inline=False)
             embed.add_field(name="<:ironchestplate:1247719811857907762> Deaths:", value=f"{formatting_functions.add_commas(player1DataList[5])} {signs[5]} {formatting_functions.add_commas(player2DataList[5])}", inline=False)
-            embed.add_field(name="<:diamondsword:1247404240016773231> KDR:", value=f"{player1DataList[6]} {signs[6]} {player2DataList[6]}", inline=False)
+            embed.add_field(name="<:diamondsword:1247404240016773231> KDR:", value=f"{player1DataList[6]:.2f} {signs[6]} {player2DataList[6]:.2f}", inline=False)
             embed.add_field(name="<a:minecraftclock:1247400003786510479> Time Played:", value=f"{formatting_functions.format_playtime(int(player1DataList[7]))} {signs[7]} {formatting_functions.format_playtime(int(player2DataList[7]))}", inline=False)
-            embed.set_footer(text=footerDateGen())
-
-            if player1DataList[0] > player2DataList[0]:
+            if winner == 1:
+                embed.add_field(name=":first_place: Winner:", value=f"{player1Data['data']['name']} with {(player1DataList[0] / (player1DataList[7] / 1440)):.2f} Prestiges per Day", inline=False)
                 embed.set_thumbnail(url=f"https://visage.surgeplay.com/face/512/{player1Data['data']['uuid']}?format=webp")
             else:
+                embed.add_field(name=":first_place: Winner:", value=f"{player2Data['data']['name']} with {(player2DataList[0] / (player2DataList[7] / 1440)):.2f} Prestiges per Day", inline=False)
                 embed.set_thumbnail(url=f"https://visage.surgeplay.com/face/512/{player2Data['data']['uuid']}?format=webp")
+            embed.set_footer(text=footerDateGen())
 
             await interaction.response.send_message(embed=embed) # noqa
 
@@ -130,8 +133,8 @@ class compare(commands.Cog):
 
             embed = discord.Embed(title=f"Player Stats for [{formatting_functions.int_to_roman(prestige)}{level}] {data['data']['name']}", color=calcBracketColor(int(prestige)))
             embed.add_field(name=f"{pit_functions.getBracketColorEmoji(prestige)} Prestige & Level:", value=f"[{formatting_functions.int_to_roman(prestige)}{level}]", inline=False)
-            embed.add_field(name="<:xpbottle:1245974825865056276> XP Grinded:", value=f"{formatting_functions.add_commas(xp)} XP", inline=False)
-            embed.add_field(name="<:goldingot:1247391882968043652> Gold Grinded:", value=f"{formatting_functions.add_commas(gold)} G", inline=False)
+            embed.add_field(name="<:xpbottle:1245974825865056276> Lifetime XP:", value=f"{formatting_functions.add_commas(xp)} XP", inline=False)
+            embed.add_field(name="<:goldingot:1247391882968043652> Lifetime Gold:", value=f"{formatting_functions.add_commas(gold)} G", inline=False)
             embed.add_field(name="<:ironsword:1247392632129323080> Kills:", value=f"{formatting_functions.add_commas(kills)}", inline=False)
             embed.add_field(name="<:ironchestplate:1247719811857907762> Deaths:", value=f"{formatting_functions.add_commas(deaths)}", inline=False)
             embed.add_field(name="<:diamondsword:1247404240016773231> KDR:", value=f"{kdr}", inline=False)

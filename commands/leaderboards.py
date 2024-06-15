@@ -1,13 +1,11 @@
-import asyncio
 import discord
-import json
-from discord.ext import commands
 from discord import app_commands
-from useful_things.api_functions import getInfo
-from useful_things import pit_functions
+from discord.ext import commands
+
 from useful_things import formatting_functions
-from useful_things.discord_functions import footerDateGen
 from useful_things import pit_functions
+from useful_things.api_functions import getInfo
+from useful_things.discord_functions import footerDateGen
 from useful_things.pit_functions import calcBracketColor
 
 globalLeaderboardsList = ["kills", "assists", "damageDealt", "damageReceived", "deaths", "xp", "gold", "lifetimeGold", "playtime", "contracts", "gapples", "gheads", "lavaBuckets", "soups", "tierThrees", "darkPants", "leftClicks", "chatMessages", "wheatFarmed", "fishedAnything", "blocksBroken", "blocksPlaced", "kingsQuests", "sewerTreasures", "nightQuests", "renown", "lifetimeRenown", "arrowShots", "arrowHits", "jumpsIntoPit", "launcherLaunches", "enderchestOpened", "diamondItemsPurchased", "fishedFish", "hiddenJewelsTriggered", "fishingRodCasts", "bountiesClaimed", "ragePotatoesEaten", "obsidianBroken", "ingotsPickedUp", "vampireHealedHp"]
