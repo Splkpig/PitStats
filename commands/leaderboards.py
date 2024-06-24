@@ -277,5 +277,174 @@ class leaderboards(commands.Cog):
         await interaction.followup.send(embed=embed, view=view)
 
 
+    @app_commands.command(name="leaderboard-compare-positions", description="Compares the leaderboard positions of two players")
+    async def comparePositions(self, interaction: discord.Interaction, player1: str, player2: str):
+        """
+        Args:
+            player1 (str): A Minecraft username
+            player2 (str): A Minecraft username
+        """
+        pass
+
+        global leaderboardPositionPage
+        global leaderboardPositionPages
+        global globalLeaderboardsFormatedList
+
+        leaderboardPositionPage = 0
+        leaderboardPositionPages = []
+
+        player = player1
+        player1 = player2
+        urlPP: str = f"https://pitpanda.rocks/api/players/{player}"
+        data = getInfo(urlPP)
+        urlPP1: str = f"https://pitpanda.rocks/api/players/{player1}"
+        data1 = getInfo(urlPP1)
+
+        if not data["success"]:
+            embedFail = discord.Embed(title="Player not found", color=discord.Color.red())
+
+            await interaction.response.send_message(embed=embedFail, ephemeral=True)  # noqa
+
+        else:
+            currentPrestige = len(data["data"].get("prestiges", [0])) - 1
+
+            xpProgress = data["data"].get("xpProgress", {})
+            display_current_xp = int(xpProgress.get("displayCurrent", 0))
+            currentLevel = pit_functions.xpToLevel(currentPrestige, display_current_xp)
+
+            uuid = data["data"]["uuid"]
+            leaderboardsData = getInfo(f"https://pitpanda.rocks/api/position/{uuid}")
+
+            currentPrestige1 = len(data1["data"].get("prestiges", [0])) - 1
+
+            xpProgress1 = data1["data"].get("xpProgress", {})
+            display_current_xp1 = int(xpProgress1.get("displayCurrent", 0))
+            currentLevel1 = pit_functions.xpToLevel(currentPrestige1, display_current_xp1)
+
+            uuid1 = data1["data"]["uuid"]
+            leaderboardsData1 = getInfo(f"https://pitpanda.rocks/api/position/{uuid1}")
+
+            global globalLeaderboardsFormatedList
+            leaderboardsFormatedList = globalLeaderboardsFormatedList
+            playersRankings = []
+            playersRankings1 = []
+
+            await interaction.response.defer()  # noqa
+
+            rankingsFormatted = formatting_functions.formatRankingsData(leaderboardsData["rankings"])
+            rankingsFormatted1 = formatting_functions.formatRankingsData(leaderboardsData1["rankings"])
+
+            for i in range(0, len(rankingsFormatted)):
+                playersRankings.append({leaderboardsFormatedList[i]: rankingsFormatted[i]})
+                playersRankings1.append(rankingsFormatted1[i])
+                # print(f"finished {leaderboardsFormatedList[i][leaderboardsFormatedList[i].index(' ') + 1:]}")
+            sorted_leaderboards = sorted(playersRankings, key=lambda x: list(x.values())[0], reverse=False)
+
+            signs = []
+            for idx, leaderboard in enumerate(sorted_leaderboards, start=1):
+                leaderboard_name, ranking = next(iter(leaderboard.items()))
+                if ranking != 999999 and playersRankings1[globalLeaderboardsFormatedList.index(leaderboard_name)] != 999999:
+                    if ranking > playersRankings1[globalLeaderboardsFormatedList.index(leaderboard_name)]:
+                        signs.append('<')
+                    elif ranking < playersRankings1[globalLeaderboardsFormatedList.index(leaderboard_name)]:
+                        signs.append('>')
+                    else:
+                        signs.append('=')
+                else:
+                    signs.append('')
+
+            count1 = signs.count('>')
+            count2 = signs.count('<')
+            leader = 0
+            if count1 > count2:
+                leader = 1
+            else:
+                leader = 2
+
+            if leader == 1:
+                embed = discord.Embed(title=f"Leaderboard positions for [{formatting_functions.int_to_roman(currentPrestige)}{currentLevel}] {data['data']['name']} vs [{formatting_functions.int_to_roman(currentPrestige1)}{currentLevel1}] {data1['data']['name']}", color=calcBracketColor(currentPrestige))
+                embed.set_thumbnail(url=f"https://visage.surgeplay.com/face/512/{data['data']['uuid']}?format=webp")
+            else:
+                embed = discord.Embed(title=f"Leaderboard positions for [{formatting_functions.int_to_roman(currentPrestige)}{currentLevel}] {data['data']['name']} vs [{formatting_functions.int_to_roman(currentPrestige1)}{currentLevel1}] {data1['data']['name']}", color=calcBracketColor(currentPrestige1))
+                embed.set_thumbnail(url=f"https://visage.surgeplay.com/face/512/{data1['data']['uuid']}?format=webp")
+
+            i = 0
+            for idx, leaderboard in enumerate(sorted_leaderboards, start=1):
+                leaderboard_name, ranking = leaderboard.popitem()
+                if i % 10 == 0 and i != 0:
+                    leaderboardPositionPages.append(embed)
+                    if leader == 1:
+                        embed = discord.Embed(title=f"Leaderboard positions for [{formatting_functions.int_to_roman(currentPrestige)}{currentLevel}] {data['data']['name']} vs [{formatting_functions.int_to_roman(currentPrestige1)}{currentLevel1}] {data1['data']['name']}", color=calcBracketColor(currentPrestige))
+                        embed.set_thumbnail(url=f"https://visage.surgeplay.com/face/512/{data['data']['uuid']}?format=webp")
+                    else:
+                        embed = discord.Embed(title=f"Leaderboard positions for [{formatting_functions.int_to_roman(currentPrestige)}{currentLevel}] {data['data']['name']} vs [{formatting_functions.int_to_roman(currentPrestige1)}{currentLevel1}] {data1['data']['name']}", color=calcBracketColor(currentPrestige1))
+                        embed.set_thumbnail(url=f"https://visage.surgeplay.com/face/512/{data1['data']['uuid']}?format=webp")
+
+                if ranking == 999999:
+                    if playersRankings1[globalLeaderboardsFormatedList.index(leaderboard_name)] == 999999:
+                        embed.add_field(name=f"{leaderboard_name}:", value=f"N/A = N/A", inline=False)
+                    elif playersRankings1[globalLeaderboardsFormatedList.index(leaderboard_name)] == 1:
+                        embed.add_field(name=f"{leaderboard_name}:", value=f"N/A < :first_place: #{playersRankings1[globalLeaderboardsFormatedList.index(leaderboard_name)]}", inline=False)
+                    elif playersRankings1[globalLeaderboardsFormatedList.index(leaderboard_name)] <= 10:
+                        embed.add_field(name=f"{leaderboard_name}:", value=f"N/A < :second_place: #{playersRankings1[globalLeaderboardsFormatedList.index(leaderboard_name)]}", inline=False)
+                    elif playersRankings1[globalLeaderboardsFormatedList.index(leaderboard_name)] <= 100:
+                        embed.add_field(name=f"{leaderboard_name}:", value=f"N/A < :third_place: #{playersRankings1[globalLeaderboardsFormatedList.index(leaderboard_name)]}", inline=False)
+                    else:
+                        embed.add_field(name=f"{leaderboard_name}:", value=f"N/A < #{playersRankings1[globalLeaderboardsFormatedList.index(leaderboard_name)]}", inline=False)
+                elif ranking == 1:
+                    if playersRankings1[globalLeaderboardsFormatedList.index(leaderboard_name)] == 999999:
+                        embed.add_field(name=f"{leaderboard_name}:", value=f":first_place: #{ranking} > N/A", inline=False)
+                    elif playersRankings1[globalLeaderboardsFormatedList.index(leaderboard_name)] == 1:
+                        embed.add_field(name=f"{leaderboard_name}:", value=f":first_place: #{ranking} {signs[i]} :first_place: #{playersRankings1[globalLeaderboardsFormatedList.index(leaderboard_name)]}", inline=False)
+                    elif playersRankings1[globalLeaderboardsFormatedList.index(leaderboard_name)] <= 10:
+                        embed.add_field(name=f"{leaderboard_name}:", value=f":first_place: #{ranking} {signs[i]} :second_place: #{playersRankings1[globalLeaderboardsFormatedList.index(leaderboard_name)]}", inline=False)
+                    elif playersRankings1[globalLeaderboardsFormatedList.index(leaderboard_name)] <= 100:
+                        embed.add_field(name=f"{leaderboard_name}:", value=f":first_place: #{ranking} {signs[i]} :third_place: #{playersRankings1[globalLeaderboardsFormatedList.index(leaderboard_name)]}", inline=False)
+                    else:
+                        embed.add_field(name=f"{leaderboard_name}:", value=f":first_place: #{ranking} {signs[i]} #{playersRankings1[globalLeaderboardsFormatedList.index(leaderboard_name)]}", inline=False)
+                elif ranking <= 10:
+                    if playersRankings1[globalLeaderboardsFormatedList.index(leaderboard_name)] == 999999:
+                        embed.add_field(name=f"{leaderboard_name}:", value=f":second_place: #{ranking} > N/A", inline=False)
+                    elif playersRankings1[globalLeaderboardsFormatedList.index(leaderboard_name)] == 1:
+                        embed.add_field(name=f"{leaderboard_name}:", value=f":second_place: #{ranking} {signs[i]} :first_place: #{playersRankings1[globalLeaderboardsFormatedList.index(leaderboard_name)]}", inline=False)
+                    elif playersRankings1[globalLeaderboardsFormatedList.index(leaderboard_name)] <= 10:
+                        embed.add_field(name=f"{leaderboard_name}:", value=f":second_place: #{ranking} {signs[i]} :second_place: #{playersRankings1[globalLeaderboardsFormatedList.index(leaderboard_name)]}", inline=False)
+                    elif playersRankings1[globalLeaderboardsFormatedList.index(leaderboard_name)] <= 100:
+                        embed.add_field(name=f"{leaderboard_name}:", value=f":second_place: #{ranking} {signs[i]} :third_place: #{playersRankings1[globalLeaderboardsFormatedList.index(leaderboard_name)]}", inline=False)
+                    else:
+                        embed.add_field(name=f"{leaderboard_name}:", value=f":second_place: #{ranking} {signs[i]} #{playersRankings1[globalLeaderboardsFormatedList.index(leaderboard_name)]}", inline=False)
+                elif ranking <= 100:
+                    if playersRankings1[globalLeaderboardsFormatedList.index(leaderboard_name)] == 999999:
+                        embed.add_field(name=f"{leaderboard_name}:", value=f":third_place: #{ranking} > N/A", inline=False)
+                    elif playersRankings1[globalLeaderboardsFormatedList.index(leaderboard_name)] == 1:
+                        embed.add_field(name=f"{leaderboard_name}:", value=f":third_place: #{ranking} {signs[i]} :first_place: #{playersRankings1[globalLeaderboardsFormatedList.index(leaderboard_name)]}", inline=False)
+                    elif playersRankings1[globalLeaderboardsFormatedList.index(leaderboard_name)] <= 10:
+                        embed.add_field(name=f"{leaderboard_name}:", value=f":third_place: #{ranking} {signs[i]} :second_place: #{playersRankings1[globalLeaderboardsFormatedList.index(leaderboard_name)]}", inline=False)
+                    elif playersRankings1[globalLeaderboardsFormatedList.index(leaderboard_name)] <= 100:
+                        embed.add_field(name=f"{leaderboard_name}:", value=f":third_place: #{ranking} {signs[i]} :third_place: #{playersRankings1[globalLeaderboardsFormatedList.index(leaderboard_name)]}", inline=False)
+                    else:
+                        embed.add_field(name=f"{leaderboard_name}:", value=f":third_place: #{ranking} {signs[i]} #{playersRankings1[globalLeaderboardsFormatedList.index(leaderboard_name)]}", inline=False)
+                else:
+                    if playersRankings1[globalLeaderboardsFormatedList.index(leaderboard_name)] == 999999:
+                        embed.add_field(name=f"{leaderboard_name}:", value=f"#{ranking} > N/A", inline=False)
+                    elif playersRankings1[globalLeaderboardsFormatedList.index(leaderboard_name)] == 1:
+                        embed.add_field(name=f"{leaderboard_name}:", value=f"#{ranking} {signs[i]} :first_place: #{playersRankings1[globalLeaderboardsFormatedList.index(leaderboard_name)]}", inline=False)
+                    elif playersRankings1[globalLeaderboardsFormatedList.index(leaderboard_name)] <= 10:
+                        embed.add_field(name=f"{leaderboard_name}:", value=f"#{ranking} {signs[i]} :second_place: #{playersRankings1[globalLeaderboardsFormatedList.index(leaderboard_name)]}", inline=False)
+                    elif playersRankings1[globalLeaderboardsFormatedList.index(leaderboard_name)] <= 100:
+                        embed.add_field(name=f"{leaderboard_name}:", value=f"#{ranking} {signs[i]} :third_place: #{playersRankings1[globalLeaderboardsFormatedList.index(leaderboard_name)]}", inline=False)
+                    else:
+                        embed.add_field(name=f"{leaderboard_name}:", value=f"#{ranking} {signs[i]} #{playersRankings1[globalLeaderboardsFormatedList.index(leaderboard_name)]}", inline=False)
+                if i == len(sorted_leaderboards) - 1:
+                    leaderboardPositionPages.append(embed)
+                i += 1
+
+            embed = leaderboardPositionPages[0]
+            embed.set_footer(text=f"Current Page: {leaderboardPositionPage + 1} / {len(leaderboardPositionPages)}")
+            view = simpleViewPositions(timeout=None)
+
+            await interaction.followup.send(embed=embed, view=view)  # noqa
+
+
 async def setup(client: commands.Bot) -> None:
     await client.add_cog(leaderboards(client))

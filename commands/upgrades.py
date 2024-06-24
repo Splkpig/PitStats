@@ -127,7 +127,6 @@ class upgrades(commands.Cog):
 
             for item in counts:
                 if int(elements.index(item[0]) % 10) == 0 and elements.index(item[0]) != 0:
-                    print('new embed')
                     pages.append(embed)
                     embed = discord.Embed(title=f"{upgradeTypeEmbeds[upgrade_type]}[{formatting_functions.int_to_roman(prestigeStat)}{currentLevel}] {data['data']['name']}", color=pit_functions.calcBracketColor(prestigeStat))
                     embed.set_thumbnail(url=f"https://visage.surgeplay.com/face/512/{data['data']['uuid']}?format=webp")
