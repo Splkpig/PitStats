@@ -32,10 +32,16 @@ sessions.add_field(name="/session-end", value="Ends your current stat tracking s
 upgrades = discord.Embed(title="Upgrades", color=discord.Color.greyple())
 upgrades.add_field(name="/upgrades *player*", value="Shows most purchased upgrades for a player", inline=False)
 
+verification = discord.Embed(title="Verification", color=discord.Color.greyple())
+verification.add_field(name="/verify *player*", value="Verifies a player's Hypixel account", inline=False)
+verification.add_field(name="/verify-manual *player* *user*", value="Manually verifies a player's Hypixel account", inline=False)
+verification.add_field(name="/create-prestige-roles", value="Automatically create all the prestige roles", inline=False)
+
+
 funCommands = discord.Embed(title="Fun Commands", color=discord.Color.greyple())
 funCommands.add_field(name="/jenna *player*", value="Compares a player's yapping to Jenna's", inline=False)
 
-helpPages = [pitpandaSignatures, prestigeCalculations, mapQuests, stats, leaderboards, sessions, upgrades, funCommands]
+helpPages = [pitpandaSignatures, prestigeCalculations, mapQuests, stats, leaderboards, sessions, upgrades, verification, funCommands]
 currentPage = -1
 
 

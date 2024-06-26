@@ -144,6 +144,47 @@ class discordFeatures(commands.Cog):
         else:
             raise error
 
+    @app_commands.command(name="create-prestige-roles", description="create the prestige roles")
+    @app_commands.checks.has_permissions(administrator=True)
+    async def createPrestigeRoles(self, interaction: discord.Interaction):
+        guild = interaction.guild
+
+        # Defer the response to avoid interaction expiration
+        await interaction.response.defer(ephemeral=True) # noqa
+
+        roles_to_create = [
+            ("Dark Grey Brackets", 0x555555),
+            ("Dark Red Brackets", 0xAA0000),
+            ("Black Brackets", 0x000000),
+            ("Dark Blue Brackets", 0x0000AA),
+            ("Aqua Brackets", 0x55FFFF),
+            ("White Brackets", 0xFFFFFF),
+            ("Pink Brackets", 0xFF55FF),
+            ("Purple Brackets", 0xAA00AA),
+            ("Red Brackets", 0xFF5555),
+            ("Orange Brackets", 0xFFAA00),
+            ("Yellow Brackets", 0xFFFF55),
+            ("Blue Brackets", 0x5555FF),
+            ("Grey Brackets", 0xAAAAAA)
+        ]
+
+        for role_name, role_color in roles_to_create:
+            if discord.utils.get(guild.roles, name=role_name) is None:
+                await guild.create_role(name=role_name, color=role_color)
+            else:
+                embed = discord.Embed(title=f"Role creation failed for {role_name}", color=discord.Color.red())
+                await interaction.followup.send(embed=embed, ephemeral=True)  # noqa
+
+        embed = discord.Embed(title="Roles created", color=discord.Color.green())
+        await interaction.followup.send(embed=embed, ephemeral=True)  # noqa
+
+    @createPrestigeRoles.error
+    async def on_test_error(self, interaction: discord.Interaction, error: discord.app_commands.errors.MissingPermissions):
+        if isinstance(error, discord.app_commands.errors.MissingPermissions):
+            await interaction.response.send_message(error, ephemeral=True)  # noqa
+        else:
+            raise error
+
 
 async def setup(client: commands.Bot) -> None:
     await client.add_cog(discordFeatures(client))
