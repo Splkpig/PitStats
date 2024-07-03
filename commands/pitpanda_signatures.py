@@ -11,6 +11,7 @@ class pitpandaSignatures(commands.Cog):
     def __init__(self, client: commands.Bot):
         self.client = client
 
+    # Create the PitPanda prestige and level embed command
     @app_commands.command(name="prestige-level", description="Displays Pitpanda prestige and level signature")
     async def prestige_level(self, interaction: discord.Interaction, player: str):
         """my command description
@@ -42,6 +43,7 @@ class pitpandaSignatures(commands.Cog):
 
             await interaction.response.send_message(embed=embed)  # noqa
 
+    # Create the PitPanda profile embed command
     @app_commands.command(name="profile", description="Display Pitpanda Profile Signature")
     async def profile(self, interaction: discord.Interaction, player: str):
         """my command description

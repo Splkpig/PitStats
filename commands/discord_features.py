@@ -14,6 +14,7 @@ class discordFeatures(commands.Cog):
     def __init__(self, client):
         self.client = client
 
+    # Create the verify command
     @app_commands.command(name="verify", description="Verify your Hypixel account")
     async def verify(self, interaction: discord.Interaction, player: str):
         """
@@ -31,6 +32,7 @@ class discordFeatures(commands.Cog):
 
         if data["success"] is False:
             embedFail = discord.Embed(title="API on cooldown", color=discord.Color.red())
+            embedFail.add_field(name="", value="Ping <@688203642695581717> if you continue to get this")
 
             await interaction.response.send_message(embed=embedFail, ephemeral=True)  # noqa
 
@@ -90,6 +92,7 @@ class discordFeatures(commands.Cog):
 
                             await interaction.response.send_message(embed=embedFail, ephemeral=True)  # noqa
 
+    # Create the verify manual command
     @app_commands.command(name="verify-manual", description="Manually verify a players minecraft and discord account")
     @app_commands.checks.has_permissions(administrator=True)
     async def verify_manual(self, interaction: discord.Interaction, player: str, user: discord.Member):
@@ -137,6 +140,7 @@ class discordFeatures(commands.Cog):
             if not failed:
                 await interaction.response.send_message(embed=embed) # noqa
 
+    # Catch the permissions error if a non-admin attempts to use verify manual
     @verify_manual.error
     async def on_test_error(self, interaction: discord.Interaction, error: discord.app_commands.errors.MissingPermissions):
         if isinstance(error, discord.app_commands.errors.MissingPermissions):
@@ -144,6 +148,7 @@ class discordFeatures(commands.Cog):
         else:
             raise error
 
+    # Create the create prestige roles command
     @app_commands.command(name="create-prestige-roles", description="create the prestige roles")
     @app_commands.checks.has_permissions(administrator=True)
     async def createPrestigeRoles(self, interaction: discord.Interaction):
@@ -178,6 +183,7 @@ class discordFeatures(commands.Cog):
         embed = discord.Embed(title="Roles created", color=discord.Color.green())
         await interaction.followup.send(embed=embed, ephemeral=True)  # noqa
 
+    # Catch the permissions error if a non-admin attempts to use create prestige roles
     @createPrestigeRoles.error
     async def on_test_error(self, interaction: discord.Interaction, error: discord.app_commands.errors.MissingPermissions):
         if isinstance(error, discord.app_commands.errors.MissingPermissions):

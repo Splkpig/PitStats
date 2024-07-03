@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 from discord import app_commands
 
+# Create the embeds for the pages in the help command
 pitpandaSignatures = discord.Embed(title="PitPanda Signatures", color=discord.Color.greyple())
 pitpandaSignatures.add_field(name="/prestige-level *player*", value="Displays a player's prestige and level PitPanda signature", inline=False)
 pitpandaSignatures.add_field(name="/profile *player*", value="Displays a player's profile PitPanda signature", inline=False)
@@ -45,6 +46,7 @@ helpPages = [pitpandaSignatures, prestigeCalculations, mapQuests, stats, leaderb
 currentPage = -1
 
 
+# Set up the buttons to scroll through the help command pages
 class simpleView(discord.ui.View):
     @discord.ui.button(label="⬅️", style=discord.ButtonStyle.blurple)
     async def back(self, interaction: discord.Interaction, button: discord.ui.Button):
@@ -97,6 +99,7 @@ class helpCommand(commands.Cog):
 
     global currentPage
 
+    # Create the help command
     @app_commands.command(name="help", description="Displays the bot's commands")
     async def help(self, interaction: discord.Interaction):
         global currentPage

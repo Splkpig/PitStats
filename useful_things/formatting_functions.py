@@ -1,12 +1,12 @@
 import re
 
-import discord
 
-
+# Add commas to a given number
 def add_commas(number):
     return "{:,}".format(number)
 
 
+# Convert an int into its roman numeral form
 def int_to_roman(num):
     if num == 0:
         return ""
@@ -31,56 +31,33 @@ def int_to_roman(num):
     return roman_num + "-"
 
 
-def extract_number(input_string):
-    # Define the regular expression pattern to match numbers
-    pattern = r'\d+'
-
-    # Search the pattern in the input string
-    match = re.search(pattern, input_string)
-
-    # If a match is found, return the matched number
-    if match:
-        return match.group(0)
-    else:
-        return None
-
-
+# Get a player's current level given their formatted prestige and level string
 def extract_substring(input_string):
-    # Find the position of the hyphen
     hyphen_pos = input_string.find('-')
 
     if hyphen_pos == -1:
-        return None  # Hyphen not found
+        return None
 
-    # Calculate the starting position (4 characters after the hyphen)
     start_pos = hyphen_pos + 5
-
-    # Ensure start_pos is within the string length
     if start_pos >= len(input_string):
         return None
 
-    # Find the position of the next '§' after the starting position
     end_pos = input_string.find('§', start_pos)
-
     if end_pos == -1:
-        return None  # Next '§' not found
+        return None
 
-    # Extract the substring from start_pos to end_pos
     result = input_string[start_pos:end_pos]
-
     return result
 
 
+# Convert a playtime in minutes int into a formatted string that can include months and days
 def format_playtime(playtime_minutes):
-    # Constants for time conversion
     MINUTES_IN_HOUR = 60
     HOURS_IN_DAY = 24
     DAYS_IN_MONTH = 30
 
-    # Convert minutes to hours
     total_hours = playtime_minutes / MINUTES_IN_HOUR
 
-    # Format playtime based on total hours
     if total_hours < HOURS_IN_DAY:
         return f"{total_hours:.0f} hr"
     elif total_hours < HOURS_IN_DAY * DAYS_IN_MONTH:
@@ -94,18 +71,18 @@ def format_playtime(playtime_minutes):
         return f"{months} mo, {days:.0f} d"
 
 
+# Get a player's name from their formatted nametag
 def extract_name(input_string):
-    # Find the position of the last instance of '§b'
     last_index = input_string.rfind(' ')
 
     if last_index != -1:
-        # Extract the substring after the last '§b'
         name = input_string[last_index + 3:]
         return name
     else:
         return None
 
 
+# Format a player's ranking data and remove and unwanted ranking data
 def formatRankingsData(listToFormat):
     blackListed = ['damageRatio', 'highestStreak', 'kdr', 'tierOnes', 'tierTwos', 'darkPantsT2', 'totalJumps', 'bounty', 'genesisPoints', 'joins', 'bowAccuracy', 'swordHits', 'meleeDamageDealt', 'meleeDamageReceived', 'meleeDamageRatio', 'bowDamageDealt', 'bowDamageReceived', 'bowDamageRatio', 'xpHourly', 'goldHourly', 'killsHourly', 'kadr', 'killAssistHourly', 'contractsStarted', 'contractsRatio', 'ingotsGold']
 

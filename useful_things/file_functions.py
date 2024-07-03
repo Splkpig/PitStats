@@ -1,21 +1,13 @@
 import time
 
-
+# Read a certain line in a file
 def read_specific_line(file_path, line_number):
-    """
-    Reads a specific line from a text file.
-
-    :param file_path: Path to the text file
-    :param line_number: The line number to read (1-based index)
-    :return: The content of the specified line or None if the line does not exist
-    """
     try:
         with open(file_path, 'r') as file:
             lines = file.readlines()
-            # Convert line_number to 0-based index
             index = line_number
             if 0 <= index < len(lines):
-                return lines[index].strip()  # Use strip() to remove any trailing newline characters
+                return lines[index].strip()
             else:
                 return None
     except FileNotFoundError:
@@ -25,7 +17,7 @@ def read_specific_line(file_path, line_number):
         print(f"An error occurred: {e}")
         return None
 
-
+# Create a session in the session storage file
 def startSession(player, userID, xp, gold, kills, deaths, playtime):
     timeUNIX = int(time.time())
     stats_string = f"{player}:{userID}:{xp}:{gold}:{kills}:{deaths}:{playtime}:{timeUNIX}"
@@ -34,6 +26,7 @@ def startSession(player, userID, xp, gold, kills, deaths, playtime):
         file.write(stats_string + '\n')
 
 
+# Get the info about a session from the session storage file
 def viewSession(userID):
     with open("../PitStats/storage/sessions.txt", "r") as file:
         for line in file:
@@ -43,6 +36,7 @@ def viewSession(userID):
     return None
 
 
+# Delete a session from the session storage file
 def endSession(userID):
     with open("../PitStats/storage/sessions.txt", "r") as file:
         lines = file.readlines()
@@ -52,6 +46,7 @@ def endSession(userID):
         file.writelines(updated_lines)
 
 
+# Check if a user already has a session in the session storage file
 def hasSession(userID):
     with open("../PitStats/storage/sessions.txt", "r") as file:
         for line in file:
@@ -61,6 +56,7 @@ def hasSession(userID):
     return False
 
 
+# Check the currently stored sessions and delete any older than 24 hours
 def checkSessions():
     with open("../PitStats/storage/sessions.txt", "r") as file:
         for line in file:

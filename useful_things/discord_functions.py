@@ -1,14 +1,14 @@
 import discord
 from datetime import datetime
 
-
+# Generate the current time to be placed in an embed's footer
 def footerDateGen():
     now = datetime.now()
     formatted_now = now.strftime("%m/%d/%Y %I:%M %p")
     formatted_now = formatted_now.replace(" 0", " ")
     return formatted_now
 
-
+# Return the role object that corresponds to a certain prestige
 def getPrestigeRole(prestige: int, interaction):
     if prestige == 0:
         return discord.utils.get(interaction.guild.roles, name="Grey Brackets")

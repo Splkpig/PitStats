@@ -11,7 +11,7 @@ globalPrestige = 0
 globalLevel = 0
 globalPlayer = ""
 
-
+# Create the button to show more information about a player's xp until
 class simpleView(discord.ui.View):
 
     @discord.ui.button(label="View data breakdown", style=discord.ButtonStyle.blurple)
@@ -51,6 +51,7 @@ class prestigeCalculations(commands.Cog):
     def __init__(self, client: commands.Bot):
         self.client = client
 
+    # Create the show a player's prestige info command
     @app_commands.command(name="prestige-info", description="Shows XP and Gold info for current prestige")
     async def prestige_info(self, interaction: discord.Interaction, player: str):
         """my command description
@@ -98,6 +99,7 @@ class prestigeCalculations(commands.Cog):
 
             await interaction.response.send_message(embed=embed)  # noqa
 
+    # Create the xp until calculation command
     @app_commands.command(name="xp-until", description="XP needed to reach a certain prestige and level")
     async def xp_until(self, interaction: discord.Interaction, player: str, prestige: int, level: int):
         """my command description
@@ -158,9 +160,7 @@ class prestigeCalculations(commands.Cog):
             embed = discord.Embed(title=f"XP until for {data['data']['name']}", color=pit_functions.calcBracketColor(prestige))
             embed.set_footer(text=footerDateGen())
 
-            embed.add_field(
-                name=f"[{formatting_functions.int_to_roman(currentPrestige)}{currentLevel}] ---> [{formatting_functions.int_to_roman(prestige)}{level}]:",
-                value=f"<:xpbottle:1245974825865056276> {formatting_functions.add_commas(neededXP)} XP required")
+            embed.add_field(name=f"[{formatting_functions.int_to_roman(currentPrestige)}{currentLevel}] ---> [{formatting_functions.int_to_roman(prestige)}{level}]:", value=f"<:xpbottle:1245974825865056276> {formatting_functions.add_commas(neededXP)} XP required")
             embed.add_field(name=f"", value=f"<a:minecraftclock:1247400003786510479> This will take {formatting_functions.add_commas(int(neededXP / data['data']['doc']['xpHourly']))} hours", inline=False)
             embed.set_thumbnail(url=f"https://visage.surgeplay.com/face/512/{data['data']['uuid']}?format=webp")
 

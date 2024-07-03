@@ -12,6 +12,7 @@ class mapQuests(commands.Cog):
     def __init__(self, client):
         self.client = client
 
+    # Create the genesis command
     @app_commands.command(name='genesis', description='Shows a player\'s genesis progress')
     async def genesis(self, interaction: discord.Interaction, player: str):
         """
@@ -77,6 +78,7 @@ class mapQuests(commands.Cog):
             if not failed:
                 await interaction.response.send_message(embed=embed) # noqa
 
+    # Create the kings quest command
     @app_commands.command(name="kings-quest", description="Determines what level completing the King's Quest will grant")
     async def kingsQuest(self, interaction: discord.Interaction, player: str):
         """

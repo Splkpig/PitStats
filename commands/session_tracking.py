@@ -8,6 +8,7 @@ from useful_things import formatting_functions
 from useful_things import discord_functions
 from useful_things.api_functions import getInfo
 
+# formatting for stored session
 # {player}:{userID}:{xp}:{gold}:{kills}:{deaths}:{playtime}:{timeUNIX}
 
 
@@ -15,6 +16,7 @@ class sessions(commands.Cog):
     def __init__(self, client):
         self.client = client
 
+    # Create the command to start a session
     @app_commands.command(name='session-start', description="Start a new stat tracking session")
     async def start_session(self, interaction: discord.Interaction, player: str):
         """
@@ -63,6 +65,7 @@ class sessions(commands.Cog):
 
                 await interaction.response.send_message(embed=embed) # noqa
 
+    # Create the command to the view the stats of a current session
     @app_commands.command(name="session", description="View your current session's stats")
     async def session(self, interaction: discord.Interaction):
         infoString = file_functions.viewSession(interaction.user.id)
@@ -116,6 +119,7 @@ class sessions(commands.Cog):
 
             await interaction.response.send_message(embed=embed) # noqa
 
+    # Create the command to end a session
     @app_commands.command(name="session-end", description="Stop your current session")
     async def end_session(self, interaction: discord.Interaction):
         infoString = file_functions.viewSession(interaction.user.id)

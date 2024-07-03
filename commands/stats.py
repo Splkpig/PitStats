@@ -12,6 +12,7 @@ class compare(commands.Cog):
     def __init__(self, client):
         self.client = client
 
+    # Create the command to compare the stats of two players
     @app_commands.command(name='compare', description='Compares the stats of two players')
     async def compare(self, interaction: discord.Interaction, player1: str, player2: str):
         """my command description
@@ -97,6 +98,7 @@ class compare(commands.Cog):
 
             await interaction.response.send_message(embed=embed) # noqa
 
+    # Create the command to show an overview of a player's stats
     @app_commands.command(name="overview", description='Shows an overview of a player\'s stats')
     async def overview(self, interaction: discord.Interaction, player: str):
         """

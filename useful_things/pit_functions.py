@@ -4,7 +4,7 @@ from useful_things import formatting_functions
 
 import json
 
-
+# Return the hex color for a prestige's corresponding bracket
 def calcBracketColor(prestige: int):
     if prestige == 0:
         return 0xAAAAAA
@@ -34,6 +34,7 @@ def calcBracketColor(prestige: int):
         return 0x555555
 
 
+# Return the emoji that corresponds to a bracket color for a certain prestige
 def getBracketColorEmoji(prestige: int):
     if prestige == 0:
         return "<:pit_grey_circle:1247720645769560074>"
@@ -63,6 +64,7 @@ def getBracketColorEmoji(prestige: int):
         return "<:pit_dark_grey_circle:1247722113553399828>"
 
 
+# Calculate the xp needed for a certain level within a prestige
 def calculateXPForLevel(prestige: int, level: int):
     prestigeMultiplier = float(read_specific_line("../PitStats/useful_things/pitdata/xp_multipliers.txt", prestige))
     levelTensChunk = int(level / 10)
@@ -79,6 +81,7 @@ def calculateXPForLevel(prestige: int, level: int):
     return totalXP
 
 
+# Calculate the current level within a prestige based off a player's total xp
 def xpToLevel(prestige: int, xp: int):
     prestigeMultiplier = float(read_specific_line("../PitStats/useful_things/pitdata/xp_multipliers.txt", prestige))
     xpOfPrestige: int = 0
@@ -92,6 +95,7 @@ def xpToLevel(prestige: int, xp: int):
     return 120
 
 
+# Calculate a player's faction tier based off their points
 def calculateFactionTier(points: int):
     pointsBreakdown = [30, 100, 250, 700, 1500, 4000, 7000]
 
@@ -102,6 +106,7 @@ def calculateFactionTier(points: int):
     return 7
 
 
+# Get the players from a certain leaderboard page and length
 def getLeaderboardData(lb: str, players: int, page: int):
     with open("../PitStats/tokens_and_keys/PP_API_KEY.json", 'r') as f:
         data = json.load(f)
@@ -128,7 +133,7 @@ def getLeaderboardData(lb: str, players: int, page: int):
 
         return players
 
-
+# Get the first 10 players of a certain leaderboard
 def getLeaderboardDataAll(lb: str, players: int):
     with open("../PitStats/tokens_and_keys/PP_API_KEY.json", 'r') as f:
         data = json.load(f)
