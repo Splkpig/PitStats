@@ -58,7 +58,7 @@ class fun(commands.Cog):
                 embed.set_footer(text=footerDateGen())
 
                 await interaction.response.send_message(embed=embed) # noqa
-            elif jennaChatMessages < playerChatMessages and jennaPlaytime < playerPlaytime:  # Reyertic
+            elif jennaChatMessages < playerChatMessages and jennaPlaytime < playerPlaytime:
                 embed = discord.Embed(title="", color=discord.Color.purple())
                 embed.add_field(name=f"WOW! {playerName} has out yapped jenna", value=f"In {playerPlaytime - jennaPlaytime} more hours {playerName} has yapped {playerChatMessages - jennaChatMessages} more times than jenna")
                 embed.set_thumbnail(url=f"https://visage.surgeplay.com/face/512/{dataPP['data']['uuid']}?format=webp")

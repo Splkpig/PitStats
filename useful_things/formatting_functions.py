@@ -94,8 +94,6 @@ def leaderboardEmbed(players, embed, page):
     for player in players:
         if player == 'Splkpig':
             player = f'<:splkpig:1172711478223188068> {player}'
-        elif player == 'Reyertic':
-            player = f'<:reyerticicon:1197414722564276335> {player}'
 
         embed.add_field(name=f"#{page * 10 + i}:", value=f"{player}", inline=False)
         i += 1
@@ -107,8 +105,6 @@ def leaderboardEmbedAll(players, embed):
     for player in players:
         if player == 'Splkpig':
             player = f'<:splkpig:1172711478223188068> {player}'
-        elif player == 'Reyertic':
-            player = f'<:reyerticicon:1197414722564276335> {player}'
 
         embed.add_field(name=f"#{i}:", value=f"{player}", inline=False)
         i += 1
